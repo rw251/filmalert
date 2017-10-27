@@ -1,48 +1,8 @@
 {
-    "minimum-stability": "dev",
-    "repositories": [{
-        "type": "package",
-        "package": {
-            "name": "google/apiclient",
-            "version": "1.0.0",
-            "source": {
-                "url": "https://github.com/google/google-api-php-client.git",
-                "type": "git",
-                "reference": "master"
-            },
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            }
-        }
-    }],
     "require": {
-        "silex/silex": "~1.2",
-        "twig/twig": ">=1.8,<2.0-dev",
-        "google/apiclient": "1.0.*",
-        "google/identity-toolkit-php-client": "~1.0",
-        "koala-framework/composer-extra-assets": "dev-master",
-        "guzzlehttp/guzzle": "~6.0",
-        "symfony/dom-crawler": "^3.2",
-        "symfony/css-selector": "^3.2"
+        "google/apiclient": "^2.2"
     },
-    "config" : {
-        "vendor-dir" : "dist/vendor"
-    },
-    "extra": {
-        "require-npm": {
-            "grunt": "^1.0.0",
-            "grunt-cli": "^1.2.0",
-            "grunt-cache-bust": "^1.6.0",
-            "grunt-contrib-clean": "^1.1.0",
-            "grunt-contrib-concat": "^1.0.1",
-            "grunt-contrib-copy": "^1.0.0",
-            "grunt-contrib-cssmin": "^2.2.1",
-            "grunt-contrib-uglify": "^3.1.0",
-            "grunt-minify-html": "^3.0.0",
-            "grunt-processhtml": "^0.4.1",
-            "grunt-uncss": "^0.7.1"
-        }
+    "config": {
+        "vendor-dir": "dist/vendor"
     }
 }
