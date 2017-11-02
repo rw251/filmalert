@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0'>
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name='description' content="Find the films you want to see and get an email when the're on tv">
+  <meta name='author' content='Richard Williams'>
+  <link rel='icon' href='/favicon.ico' sizes='16x16 32x32 48x48 64x64' type='image/vnd.microsoft.icon'>
+  <title>Film Alert</title>
+
+  <link rel="stylesheet" href="DIGEST(app.css)">
+
+  <meta name="google-signin-scope" content="email">
+  <!-- <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com"> -->
+  <meta name="google-signin-client_id" content="750259488516-bjd7qrappat7bsgguuob67jiaq58vbdr.apps.googleusercontent.com">
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body role="document">
+  <div class='container'>
+
+    <div class="header">
+      <ul class="nav nav-pills pull-right">
+        <li class="active">
+          <div id="profile" class="row" style="display:none">
+            <div class="col-xxs-3 col-xs-9">
+              <div class="row">
+                <div class="col-md-12">
+                  <span id="email" class="devsite-user"></span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <button onclick="signOut();">Sign out</button>
+                  <button onclick="disconnect();">Disconnect</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-3">
+              <img id="profileImage" class="devsite-avatar">
+            </div>
+          </div>
+          <div id="signinButton" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+        </li>
+      </ul>
+      <h3 class="text-muted">Film Alert </h3>
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">&times;</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+          </div>
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button id="logout" type="button" class="btn btn-primary">Log out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="actions" style="display:none">
+      <div class="row">
+        <div class="col-lg-offset-3 col-lg-6">
+          <div class="input-group">
+            <input id="filmName" class="form-control" type="text" placeholder="Search for film...">
+            <span class="input-group-btn">
+              <button class="btn btn-default" id="btnFind">Find</button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <table id="pickFilm" class="table"></table>
+    </div>
+
+    <div id="ajaxLoader" class="loader">Loading...</div>
+
+    <div>
+      <table class="table" id="myFilms" style="display:none">
+        <thead>
+          <tr>
+            <th id="filmHeader" class="pointer">Films
+              <span></span>
+            </th>
+            <th id="whenHeader" class="pointer">When
+              <span></span>
+            </th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- include all styles here that get added dynamically-->
+  <div style="display:none">
+    <div class="caret caret-reversed btn btn-danger btn-xs glyphicon glyphicon-trash hidden-xs"></div>
+    <table class="table">
+      <tbody>
+        <tr>
+          <th></th>
+        </tr>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script src="DIGEST(libraries.js)"></script>
+  <script src="DIGEST(app.js)"></script>
+  <script>
+    require("application").init();
+  </script>
+
+  <script>
+
+    function signOutBackend() {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', 'logout.php');
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.onload = function () {
+        console.log('Signed out');
+      };
+      xhr.send();
+    };
+
+    function signOut() {
+      signOutBackend();
+      
+      var auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function () {
+        console.log('User signed out.');
+      });
+    }
+
+    function disconnect() {
+      signOutBackend();
+
+      var auth2 = gapi.auth2.getAuthInstance();
+      auth2.disconnect().then(function () {
+        console.log('User disconnected.');
+      });
+    }
+  </script>
+
+</body>
+
+</html>
