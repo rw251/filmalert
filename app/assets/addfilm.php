@@ -50,7 +50,7 @@ else {
             );
         } else {
             $response = new Response(
-                '{"status":"success", "film":{"id":"'.$id.'","year":"'.$year.'","name":"'.$film.'"}}',
+                '{"status":"success", "film":{"id":"'.$id.'","year":"'.$year.'","name":"'.$film.'","when":"","channel":""}}',
                 Response::HTTP_OK,
                 array('content-type' => 'application/json')
             );

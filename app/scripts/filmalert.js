@@ -68,35 +68,6 @@ const getMyFilms = () => {
 
 exports.getMyFilms = getMyFilms;
 
-/**
- * Called after the Google client library has loaded.
- */
-
-// window.startApp = () => {
-//   gapi.load('auth2', () => {
-//     // Retrieve the singleton for the GoogleAuth library and setup the client.
-//     gapi.auth2.init({
-//       client_id: '750259488516-a7tue7cr3k8dik5i59m3b8ckmmb0eaf6.apps.googleusercontent.com',
-//       cookiepolicy: 'single_host_origin',
-//       fetch_basic_profile: false,
-//       scope: 'https://www.googleapis.com/auth/plus.login',
-//     }).then(() => {
-//       console.log('init');
-//       auth2 = gapi.auth2.getAuthInstance();
-//       auth2.then(() => {
-//         const isAuthedCallback = function () {
-//           onSignInCallback(auth2.currentUser.get().getAuthResponse());
-//         };
-//         // helper.activities(isAuthedCallback);
-//       });
-//     });
-//   });
-// };
-
-// if ('serviceWorker' in navigator) {
-//   navigator.serviceWorker.register('service-worker.js?v1');
-// }
-
 exports.init = () => {
   $films = $('#myFilms');
   $filmName = $('#filmName');
@@ -119,27 +90,23 @@ exports.init = () => {
     $loader.show();
 
     $.ajax({
-      url: `server.php/films/find/${$filmName.val()}`,
+      url: `findfilm.php?name=${$filmName.val()}`,
       type: 'POST',
       dataType: 'json',
-    }).done((data) => {
-      if (data.status === 'success') {
-        // persist
-        currentFilms = {};
+    }).done((filmList) => {
+      // persist
+      currentFilms = {};
 
-        // construct
-        const body = $('<tbody></tbody>');
+      // construct
+      const body = $('<tbody></tbody>');
 
-        for (let i = 0; i < data.films.length; i += 1) {
-          body.append($(`<tr><td>${data.films[i].name}</td><td>${data.films[i].year}</td><td><button class='btn btn-default' id='add${data.films[i].id}'>Add</button></td></tr>`));
-          currentFilms[String(data.films[i].id)] = data.films[i];
-        }
-
-        // add
-        $pickFilmTable.append(body);
-      } else {
-        $pickFilmTable.append($("<tbody><tr><td>Oops.. that didn't work. Maybe try again?</td></tr></tbody>"));
+      for (let i = 0; i < filmList.length; i += 1) {
+        body.append($(`<tr><td>${filmList[i].name}</td><td>${filmList[i].year}</td><td><button class='btn btn-default' id='add${filmList[i].id}'>Add</button></td></tr>`));
+        currentFilms[String(filmList[i].id)] = filmList[i];
       }
+
+      // add
+      $pickFilmTable.append(body);
     }).fail(() => {
       $pickFilmTable.append($("<tbody><tr><td>Oops.. that didn't work. Maybe try again?</td></tr></tbody>"));
     })
@@ -155,19 +122,21 @@ exports.init = () => {
     $loader.show();
 
     $.ajax({
-      url: `server.php/films/add/${imdbId}/${currentFilms[imdbId].name}/${currentFilms[imdbId].year}`,
+      url: 'addfilm.php',
       type: 'POST',
+      data: {
+        id: imdbId,
+        name: currentFilms[imdbId].name,
+        year: currentFilms[imdbId].year,
+      },
       dataType: 'json',
     }).done((data) => {
       if (data.status === 'success') {
-        data.film.channel = data.film.channel || '';
-        data.film.when = data.film.when || '';
         // update table
         films.push(data.film);
-        const r = row(data.film, true);
+        const r = row(data.film);
         // r.hide();
         $films.find('tbody').prepend(r);
-        r.toggle('highlight', 800);
       } else {
         $pickFilmTable.append($("<tbody><tr><td>Oops.. that didn't work. Maybe try again?</td></tr></tbody>"));
       }
@@ -188,16 +157,17 @@ exports.init = () => {
   // todo hide row with ajax
     $(this).hide();
     $.ajax({
-      url: `server.php/films/remove/${imdbId}`,
+      url: 'removefilm.php',
       type: 'POST',
+      data: {
+        imdbId,
+      },
       dataType: 'json',
     }).done((data) => {
       if (data.status === 'success') {
         // update table
         removeFilm(data.film.imdbId);
-        $films.find(`#${data.film.imdbId}`).toggle('highlight', 800, function () {
-          $(this).remove();
-        });
+        $films.find(`#${data.film.imdbId}`).remove();
         // remove ajax and row
       } else {
         $films.find(`#${data.film.imdbId}`).find('button').show();
@@ -222,26 +192,4 @@ exports.init = () => {
     films.sort(sortBy('when', true));
     redrawFilms();
   });
-
-  // $('div.header').on('click', '#disconnect', () => {
-  //   gapi.auth.signOut();
-  //   $.ajax({
-  //     type: 'POST',
-  //     url: `${window.location.href.replace(/#$/, '').replace(/\/$/, '')}/server.php/logout`,
-  //     async: false,
-  //     success(result) {
-  //       console.log(`revoke response: ${result}`);
-  //       $('#myFilms').hide();
-  //       $('#actions').hide();
-  //       $('#profile').empty();
-  //       $('#signinButton').show();
-  //     },
-  //     error(e) {
-  //       console.log(e);
-  //     },
-  //   });
-  // });
-  // $('#signout').on('click', auth.signOut);
-
- // getMyFilms();
 };

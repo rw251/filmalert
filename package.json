@@ -4,8 +4,12 @@
   "readme": " ",
   "license": "UNLICENSED",
   "scripts": {
+    "copy:private": "ncp app/private dist/private",
+    "prestart": "npm run copy:private",
     "start": "brunch watch --server",
+    "prebuild": "npm run copy:private",
     "build": "rm -rf dist/public_html && brunch build --production",
+    "prebuild:dev": "npm run copy:private",
     "build:dev": "brunch build"
   },
   "repository": {
@@ -26,6 +30,7 @@
     "jade-brunch": "^2.8.0",
     "javascript-brunch": "^2.0.0",
     "jquery": "^1.12.4",
+    "ncp": "^2.0.0",
     "npm-run-all": "^4.0.1",
     "sass-brunch": "^2.6.3"
   }

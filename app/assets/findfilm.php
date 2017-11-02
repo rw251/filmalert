@@ -21,7 +21,8 @@ foreach ($results as $res) {
     $name = $res->title();
     $year = $res->year();
     
-    $arr[] = '{"id":"'.$mid.'","name":"'.$name.'","year":"'.$year.'"}';
+    if($year && $year>1900)
+        $arr[] = '{"id":"'.$mid.'","name":"'.$name.'","year":"'.$year.'"}';
 }
 
 $response = new Response(
