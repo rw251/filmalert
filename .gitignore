@@ -5,3 +5,4 @@ dist/
 npm-debug.log
 php.ini
 composer.phar
+config.php
