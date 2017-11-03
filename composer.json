@@ -9,5 +9,8 @@
     },
     "config": {
         "vendor-dir": "dist/vendor"
+    },
+    "require-dev": {
+        "deployer/deployer": "^6.0"
     }
 }

@@ -7,12 +7,8 @@ session_start();
 // Get $id_token via HTTPS POST.
 $id_token = $_POST['idtoken'];
 
-$CLIENT_ID = getenv('FILMALERT_GOOGLE_CLIENT_ID');
-
 if($id_token) {
-  $client = new Google_Client(['client_id' => $CLIENT_ID]);
-  // $client = new Google_Client();
-  // $client->setClientId($CLIENT_ID);
+  $client = new Google_Client(['client_id' => '750259488516-7i6saor0gnkbhurf12e095v5at5cjta0.apps.googleusercontent.com']);
   $payload = $client->verifyIdToken($id_token);
   if ($payload) {
     $userId = $payload['sub'];
