@@ -11,11 +11,8 @@
     "build": "rm -rf dist/public_html && brunch build --production",
     "prebuild:dev": "npm run copy:private",
     "build:dev": "brunch build",
-    "predeploy": "npm run build",
-    "deploy": "npm run deploy:private && npm run deploy:public && npm run deploy:vendor",
-    "deploy:private":"rsync -az --force --delete --progress -e 'ssh' ./dist/private/ filmalert.cf:~/private",   
-    "deploy:public":"rsync -az --force --delete --progress -e 'ssh' ./dist/public_html/ filmalert.cf:~/public_html",
-    "deploy:vendor":"rsync -az --force --delete --progress -e 'ssh' ./dist/vendor/ filmalert.cf:~/vendor"
+    "predeploy": "npm run build",    
+    "deploy": "rsync -az --force --delete --progress -e 'ssh' ./dist/ filmalert.cf:~/ --exclude=/.ssh"
   },
   "repository": {
     "type": "git"

@@ -14,6 +14,20 @@ php -c php.ini composer.phar install
 // install npm dependencies
 npm install
 
+// this should already be done - but if messed up you need to copy public key to server:
+ssh-copy-id -i ~/.ssh/id_rsa.pub -p 65002 u958152494@31.220.20.41
+
+// and add following to ~/.ssh/config
+Host filmalert.cf
+ HostName xx.xxx.xxx.xx
+ Port xxxxx
+ User uxxxxx
+
+// can then do
+ssh filmalert.cf
+
+// can then ssh 
+
 
 // test php functions
 
