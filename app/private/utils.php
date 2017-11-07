@@ -34,19 +34,25 @@ function getFilmQueries($films){
     $con = connect();
     $queries = array();
     foreach($films as $film){
-        $search = new \Imdb\TitleSearch();
         $name = mysqli_real_escape_string($con, $film['name']);
         $year = $film['year'];
         $channel = mysqli_real_escape_string($con, $film['channel']);
         $ddd = $film['when'];
-        $results=$search->search($film['name'], array(\Imdb\TitleSearch::MOVIE), 5);
-        
-        foreach ($results as $res) {
-            if($res->year() >=$year-1 && $res->year() <=$year+1) {
-                $queries[] = "INSERT INTO `film` (`userId`, `film`, `when`, `channel`, `year`, `imdbId`) VALUES (-1, '$name', '$ddd', '$channel',$year,'".$results[0]->imdbid() . "')";
-                $queries[] = "UPDATE `film` set `when`='$ddd', `channel`='$channel' where imdbId='".$results[0]->imdbid() . "'";
-                break;
+
+        if(!$film['imdb']) {
+            $search = new \Imdb\TitleSearch();
+            $results=$search->search($film['name'], array(\Imdb\TitleSearch::MOVIE), 5);
+            
+            foreach ($results as $res) {
+                if($res->year() >=$year-1 && $res->year() <=$year+1) {
+                    $queries[] = "INSERT INTO `film` (`userId`, `film`, `when`, `channel`, `year`, `imdbId`) VALUES (-1, '$name', '$ddd', '$channel',$year,'".$results[0]->imdbid() . "')";
+                    $queries[] = "UPDATE `film` set `when`='$ddd', `channel`='$channel' where imdbId='".$results[0]->imdbid() . "'";
+                    break;
+                }
             }
+        } else {
+            $queries[] = "INSERT INTO `film` (`userId`, `film`, `when`, `channel`, `year`, `imdbId`) VALUES (-1, '$name', '$ddd', '$channel',$year,'" . $film['imdb'] . "')";
+            $queries[] = "UPDATE `film` set `when`='$ddd', `channel`='$channel' where imdbId='" . $film['imdb'] . "'";
         }
     }
     disconnect($con);
@@ -61,8 +67,72 @@ function getDateOfThreeDaysHence() {
     return date('Ymd', $dt_plus_3);
 }
 
-// TEST ADDED TO SETUP
-function getFilmsFromWeb($dt = false){
+function getFilmsFromNextFilm($dt = false) {
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_RETURNTRANSFER => 1,
+        CURLOPT_URL => "https://nextfilm.co.uk/?id=2",
+        CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0'
+    ));
+
+   
+    $result = curl_exec($curl); // send request / get response
+    $crawler = new Crawler($result); // this is the response body from the requested page (usually html)
+    
+    $name="";
+    $year=2009;
+    $dt3 = strtotime("+3 day");
+    $lastHour=-1;
+    $films = array();
+
+        //foreach film..
+    foreach($crawler->filter('.listentry') as $node) {
+        try{
+            $node = new Crawler($node);
+            $name = $node->filter('.title a')->text();
+            $year = $node->filter('i')->text();
+            $channel = $node->filter('.chanbox img')->attr('alt');
+            $time = explode(':',explode(' ',$node->filter('.time strong')->text())[0]);
+            $imdbId = explode('/',$node->filter('.imdb a')->eq(1)->attr('href'))[4];
+            $hour = intval($time[0]);
+            $min = intval($time[1]);
+            if($hour<$lastHour) break; // assuming the films appear in date order so this shouldn't happen
+            $lastHour=$hour;
+        
+            if(strlen($year)==6){
+                $year = intval(substr($year,1,4)); // for if the year is '(2007)'
+            } else {
+                $year=0;
+            }
+        
+            $dd= date_create();
+            date_timestamp_set($dd, $dt3); // these are all films on in 3 days time
+            date_time_set($dd, $hour, $min);
+            $ddd=date_format($dd, 'Y-m-d H:i:s');
+            
+            if($year>0){
+                $item = array();
+                $item['name'] = $name;
+                $item['year'] = $year;
+                $item['channel'] = $channel;
+                $item['when'] = $ddd;
+                if($imdbId) {
+                    $imdbId = substr($imdbId, 2);
+                } else {
+                    echo $name;
+                }
+                $item['imdb'] = $imdbId;
+                $films[] = $item;
+            }
+        } catch (Exception $e) {
+            // poorly formatted text
+        }
+    };    
+    
+    return $films;
+}
+
+function getFilmsFromViewFilm($dt = false) {
     if(!$dt) { $dt = getDateOfThreeDaysHence(); }
     //get films and years and channel and when
     
@@ -127,13 +197,18 @@ function getFilmsFromWeb($dt = false){
 }
 
 // TEST ADDED TO SETUP
+function getFilmsFromWeb($dt = false){
+    return getFilmsFromNextFilm($dt);
+}
+
+// TEST ADDED TO SETUP
 function addFilmsToStagingArea($films) {
     $con = connect();
     $queries = array();
     foreach($films as $film){
         $name = mysqli_real_escape_string($con, $film['name']);
         $channel = mysqli_real_escape_string($con, $film['channel']);
-        $queries[] = "INSERT INTO `film_staging_area` VALUES ('".$name."',".$film['year'].",'".$channel."','".$film['when']."')"; 
+        $queries[] = "INSERT INTO `film_staging_area` VALUES ('".$name."',".$film['year'].",'".$channel."','".$film['when']."','".$film['imdbId']."')"; 
     }
     if(!mysqli_multi_query($con,implode(";",$queries))) {
         mailOnErrorThenDie('ERROR 1005: '.mysqli_error($con));

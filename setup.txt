@@ -21,13 +21,14 @@ php -c php.ini -r "require './dist/private/utils.php'; print_r(getFilmsFromWeb()
 php -c php.ini -r "require './dist/private/utils.php'; print_r(getFilmsFromWeb('20171105'));"
 php -c php.ini -r "require './dist/private/utils.php'; print_r(getFilmQueries(array_slice(getFilmsFromWeb('20171107'),0,3)));"
 php -c php.ini -r "require './dist/private/utils.php'; print(getDateOfThreeDaysHence());"
+php -c php.ini -r "require './dist/private/utils.php'; print_r(getFilmsFromNextFilm());"
 
 php -c php.ini -r "require './dist/private/utils.php'; print(getDateOfLastFilmFetch());"
 php -c php.ini -r "require './dist/private/utils.php'; updateLastFilmFetch('20170101');"
 php -c php.ini -r "require './dist/private/utils.php'; print(getDateOfLastFilmFetch());"
 
 php -c php.ini -r "require './dist/private/utils.php'; print(getDateOfLastFilmFetch());"
-php -c php.ini -r "require './dist/private/utils.php'; addFilmsToStagingArea(array_slice(getFilmsFromWeb('20171107'),0,3));"
+php -c php.ini -r "require './dist/private/utils.php'; addFilmsToStagingArea(array_slice(getFilmsFromWeb(),0,3));"
 php -c php.ini -r "require './dist/private/utils.php'; print_r(getNRowsFromStagingArea());"
 php -c php.ini -r "require './dist/private/utils.php'; clearStagingArea();"
 php -c php.ini -r "require './dist/private/utils.php'; print_r(getNRowsFromStagingArea());"
