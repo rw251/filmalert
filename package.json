@@ -12,7 +12,7 @@
     "prebuild:dev": "npm run copy:private",
     "build:dev": "brunch build",
     "predeploy": "npm run build",    
-    "deploy": "rsync -az --force --delete --progress -e 'ssh' ./dist/ filmalert.cf:~/ --exclude=/.ssh"
+    "deploy": "rsync -az --force --delete --progress -e 'ssh' ./dist/ filmalert.cf:~/ --exclude=/.ssh --exclude=/.logs --exclude=/.cagefs"
   },
   "repository": {
     "type": "git"

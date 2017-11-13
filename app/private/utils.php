@@ -39,7 +39,7 @@ function getFilmQueries($films){
         $channel = mysqli_real_escape_string($con, $film['channel']);
         $ddd = $film['when'];
 
-        if(!$film['imdb']) {
+        if(!isset($film['imdb'])) {
             $search = new \Imdb\TitleSearch();
             $results=$search->search($film['name'], array(\Imdb\TitleSearch::MOVIE), 5);
             
