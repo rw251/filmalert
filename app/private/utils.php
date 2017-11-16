@@ -229,7 +229,7 @@ function getFilmsUpdateDB($dt){
     $films = getFilmsFromWeb($dt);
     addFilmsToStagingArea($films);
     updateLastFilmFetch($dt);
-    mail('rw251@yahoo.co.uk', 'New films found', 'New films found on '. $dt . '. Number found: ' . sizeof($queries));
+    mail('rw251@yahoo.co.uk', 'New films found', 'New films found on '. $dt . '. Number found: ' . sizeof($films));
 }
 
 // TEST ADDED TO SETUP
