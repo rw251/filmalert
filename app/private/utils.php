@@ -301,7 +301,7 @@ function executeQueries($queries) {
 
 function mailUserFilms() {
     $con = connect();
-    $res = mysqli_query($db,"SELECT `film`, `channel`, `when`, `openid` FROM `film` f inner join `users` u on u.id = f.userId where `when` > now()");
+    $res = mysqli_query($con,"SELECT `film`, `channel`, `when`, `openid` FROM `film` f inner join `users` u on u.id = f.userId where `when` > now()");
     while ($row = $res->fetch_row()) {
         mail($row[3], 'Film alert', $row[0] . ' is on ' . $row[1] . ' at ' . $row[2]);
     }
