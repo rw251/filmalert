@@ -11,7 +11,7 @@
     "build": "rm -rf dist/public_html && brunch build --production",
     "prebuild:dev": "npm run copy:private",
     "build:dev": "brunch build",
-    "predeploy": "npm run build",    
+    "predeploy": "npm run build",
     "deploy": "rsync -az --force --delete --progress -e 'ssh' ./dist/ filmalert.cf:~/ --exclude=/.ssh --exclude=/.logs --exclude=/.cagefs --exclude=/.cl.selector --exclude=/.bash_history --exclude=/vendor/imdbphp/imdbphp/cache"
   },
   "repository": {
@@ -34,6 +34,6 @@
     "jquery": "^1.12.4",
     "ncp": "^2.0.0",
     "npm-run-all": "^4.0.1",
-    "sass-brunch": "^2.6.3"
+    "sass-brunch": "^2.10.4"
   }
 }
