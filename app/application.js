@@ -1,5 +1,7 @@
 const filmalert = require('./scripts/filmalert');
 const auth = require('./scripts/auth')(() => {
+  filmalert.showActions();
+}, () => {
   filmalert.getMyFilms();
 });
 

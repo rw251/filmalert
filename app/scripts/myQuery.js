@@ -147,6 +147,14 @@ class My {
     }
     return new RegExp(`(^| )${className}( |$)`, 'gi').test(this.element.className);
   }
+
+  /**
+   * Gives focus to the element
+   * @returns {void}
+   */
+  focus() {
+    this.element.focus();
+  }
 }
 
 const init = idSelector => new My(idSelector);

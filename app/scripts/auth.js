@@ -14,7 +14,7 @@ const signOutBackend = () => {
   });
 };
 
-module.exports = (callback) => {
+module.exports = (callbackOnClientSignIn, callbackOnServerSignIn) => {
   window.onSignIn = (googleUser) => {
     // Useful data for your client-side scripts:
     const profile = googleUser.getBasicProfile();
@@ -33,7 +33,8 @@ module.exports = (callback) => {
     const idToken = googleUser.getAuthResponse().id_token;
     // console.log(`ID Token: ${idToken}`);
 
-    authenticateWithBackend(idToken, callback);
+    callbackOnClientSignIn();
+    authenticateWithBackend(idToken, callbackOnServerSignIn);
   };
 
   window.signOut = () => {

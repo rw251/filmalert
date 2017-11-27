@@ -74,6 +74,10 @@ const getMyFilms = () => {
 };
 
 exports.getMyFilms = getMyFilms;
+exports.showActions = () => {
+  $actions.show();
+  $filmName.focus();
+};
 
 exports.init = () => {
   $films = my('myFilms');
