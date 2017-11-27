@@ -71,7 +71,7 @@ function getFilmsFromNextFilm($dt = false) {
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_RETURNTRANSFER => 1,
-        CURLOPT_URL => "https://nextfilm.co.uk/?id=2",
+        CURLOPT_URL => "https://nextfilm.co.uk/?id=3",
         CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0'
     ));
 

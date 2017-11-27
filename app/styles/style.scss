@@ -1,6 +1,8 @@
 body {
   margin: 0px;
   font-family: arial;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 .loader {
   width: 100px;
@@ -14,14 +16,6 @@ body {
 .pointer {
   cursor: pointer;
 }
-/* Space out content a bit */
-
-body {
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
-/* Everything but the jumbotron gets side spacing for mobile first views */
-
 .header,
 .marketing,
 .footer {
@@ -38,40 +32,13 @@ body {
   margin-bottom: 0;
   line-height: 40px;
 }
-/* Custom page footer */
 
-.footer {
-  padding-top: 19px;
-  color: #777;
-  border-top: 1px solid #e5e5e5;
-}
 /* Customize container */
 
 @media (min-width: 768px) {
   .container {
     max-width: 730px;
   }
-}
-.container-narrow > hr {
-  margin: 30px 0;
-}
-/* Main marketing message and sign up button */
-
-.jumbotron {
-  text-align: center;
-  border-bottom: 1px solid #e5e5e5;
-}
-.jumbotron .btn {
-  padding: 14px 24px;
-  font-size: 21px;
-}
-/* Supporting marketing content */
-
-.marketing {
-  margin: 40px 0;
-}
-.marketing p + h4 {
-  margin-top: 28px;
 }
 /* Responsive: Portrait tablets and up */
 
@@ -88,58 +55,11 @@ body {
     margin-bottom: 30px;
     border-bottom: 1px solid #e5e5e5;
   }
-  /* Remove the bottom border on the jumbotron for visual effect */
-  .jumbotron {
-    border-bottom: 0;
-  }
-}
-.devsite-user {
-    /*color: #fff;*/
-    display: inline-block;
-    font-size: 13px;
-    line-height: 16px;
-    max-width: 100%;
-    opacity: .7;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transition: opacity .2s;
-    white-space: nowrap;
-    width:185px;
-}
-.devsite-user-link:hover,
-.devsite-user-link:focus {
-    opacity: 1;
-    text-decoration: none
 }
 .devsite-avatar {
     border-radius: 50%;
     height: 40px;
     vertical-align: top;
-    width: 40px
-}
-
-@media screen and (max-width: 720px) {
-    .devsite-top-logo-row {
-        padding: 10px 16px
-    }
-    .devsite-user-links-wrapper {
-        display: none
-    }
-    .devsite-user-wrapper {
-        float: right;
-        width: auto
-    }
-}
-
-.col-xxs-3 {
-  position: relative;
-  min-height: 1px;
-  padding-right: 15px;
-  padding-left: 15px;
-}
-
-@media (max-width: 460px) {
-  .col-xxs-3 {
-    width:90px;
-  }
+    width: 40px;
+    cursor: pointer;
 }

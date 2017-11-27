@@ -1,0 +1,6 @@
+.row  
+  .col-xs-3
+    img.devsite-avatar(src=src, onclick='showOptions();')
+    #options(style='display: none;position: absolute;top: 10px;right: 10px;width: 200px;')
+      button.btn.btn-default(onclick='signOut();') Sign out
+      button.btn.btn-default(onclick='disconnect();') Disconnect

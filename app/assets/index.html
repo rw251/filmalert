@@ -28,53 +28,16 @@
 </head>
 
 <body role="document">
-  <div class='container'>
+  <div class="container">
 
     <div class="header">
       <ul class="nav nav-pills pull-right">
         <li class="active">
-          <div id="profile" class="row" style="display:none">
-            <div class="col-xxs-3 col-xs-9">
-              <div class="row">
-                <div class="col-md-12">
-                  <span id="email" class="devsite-user"></span>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <button onclick="signOut();">Sign out</button>
-                  <button onclick="disconnect();">Disconnect</button>
-                </div>
-              </div>
-            </div>
-            <div class="col-xs-3">
-              <img id="profileImage" class="devsite-avatar">
-            </div>
-          </div>
+          <div id="profileBar"></div>
           <div id="signinButton" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
         </li>
       </ul>
       <h3 class="text-muted">Film Alert </h3>
-    </div>
-
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">
-              <span aria-hidden="true">&times;</span>
-              <span class="sr-only">Close</span>
-            </button>
-            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-          </div>
-          <div class="modal-body">
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button id="logout" type="button" class="btn btn-primary">Log out</button>
-          </div>
-        </div>
-      </div>
     </div>
 
     <div id="actions" style="display:none">
@@ -88,42 +51,12 @@
           </div>
         </div>
       </div>
-      <table id="pickFilm" class="table"></table>
+      <div class="row" id="filmPicker"></div>
     </div>
 
     <div id="ajaxLoader" class="loader">Loading...</div>
 
-    <div>
-      <table class="table" id="myFilms" style="display:none">
-        <thead>
-          <tr>
-            <th id="filmHeader" class="pointer">Films
-              <span></span>
-            </th>
-            <th id="whenHeader" class="pointer">When
-              <span></span>
-            </th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- include all styles here that get added dynamically-->
-  <div style="display:none">
-    <div class="caret caret-reversed btn btn-danger btn-xs glyphicon glyphicon-trash hidden-xs"></div>
-    <table class="table">
-      <tbody>
-        <tr>
-          <th></th>
-        </tr>
-        <tr>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
+    <div id="myFilms"></div>
   </div>
 
   <script src="DIGEST(libraries.js)"></script>
@@ -134,33 +67,7 @@
 
   <script>
 
-    function signOutBackend() {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', 'logout.php');
-      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      xhr.onload = function () {
-        console.log('Signed out');
-      };
-      xhr.send();
-    };
-
-    function signOut() {
-      signOutBackend();
-      
-      var auth2 = gapi.auth2.getAuthInstance();
-      auth2.signOut().then(function () {
-        console.log('User signed out.');
-      });
-    }
-
-    function disconnect() {
-      signOutBackend();
-
-      var auth2 = gapi.auth2.getAuthInstance();
-      auth2.disconnect().then(function () {
-        console.log('User disconnected.');
-      });
-    }
+    
   </script>
 
 </body>

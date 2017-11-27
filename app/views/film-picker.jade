@@ -1,0 +1,13 @@
+table.table
+  thead
+    tr
+      th Film
+      th Year
+      th
+  tbody
+    each film in films
+      tr
+        td= film.name
+        td= film.year
+        td
+          button.btn.btn-default(onclick='addFilm("' + film.id + '", "' + film.name + '", "' + film.year + '")') Add
