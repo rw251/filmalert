@@ -1,6 +1,24 @@
 const my = {
 
   /**
+   * Executed when DOM is ready
+   * @param {function} callback To call on DOM ready
+   * @returns {void}
+   */
+  ready(callback) {
+    // in case the document is already rendered
+    if (document.readyState !== 'loading') callback();
+    // modern browsers
+    else if (document.addEventListener) document.addEventListener('DOMContentLoaded', callback);
+    // IE <= 8
+    else {
+      document.attachEvent('onreadystatechange', () => {
+        if (document.readyState === 'complete') callback();
+      });
+    }
+  },
+
+  /**
    * Makes an ajax get
    * @param {string} url The url to get
    * @param {function} callback The callback on completion
@@ -161,5 +179,6 @@ const init = idSelector => new My(idSelector);
 
 init.post = my.post;
 init.get = my.get;
+init.ready = my.ready;
 
 module.exports = init;

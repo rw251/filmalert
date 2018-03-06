@@ -23,7 +23,6 @@
     "babel-eslint": "^7.2.1",
     "bootstrap": "^3.3.7",
     "brunch": "^2.8.0",
-    "digest-brunch": "^1.5.1",
     "eslint": "^3.18.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
