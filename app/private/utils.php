@@ -29,6 +29,8 @@ function mailOnErrorThenDie($emailText) {
     die();
 }
 
+$noOfDays=3;
+
 // TEST ADDED TO SETUP
 function getFilmQueries($films){
     $con = connect();
@@ -60,11 +62,11 @@ function getFilmQueries($films){
 }
 
 // TEST ADDED TO SETUP
-function getDateOfThreeDaysHence() {
+function getDateOfNDaysHence($n) {
     //get date 3 days hence
     date_default_timezone_set('Europe/London'); 
-    $dt_plus_3 = strtotime("+3 day");
-    return date('Ymd', $dt_plus_3);
+    $dt_plus_n = strtotime("+$n day");
+    return date('Ymd', $dt_plus_n);
 }
 
 function getFilmsFromNextFilm($dt = false) {
@@ -133,7 +135,7 @@ function getFilmsFromNextFilm($dt = false) {
 }
 
 function getFilmsFromViewFilm($dt = false) {
-    if(!$dt) { $dt = getDateOfThreeDaysHence(); }
+    if(!$dt) { $dt = getDateOfNDaysHence(3); }
     //get films and years and channel and when
     
     //THIS WASN'T WORKING - TURNED OUT ON THE HOSTINGER SERVER IT WAS ATTEMPTING TO DO IT ON IP6
@@ -210,10 +212,12 @@ function addFilmsToStagingArea($films) {
         $channel = mysqli_real_escape_string($con, $film['channel']);
         $queries[] = "INSERT INTO `film_staging_area` VALUES ('".$name."',".$film['year'].",'".$channel."','".$film['when']."','".$film['imdbId']."')"; 
     }
+
     if(!mysqli_multi_query($con,implode(";",$queries))) {
         mailOnErrorThenDie('ERROR 1005: '.mysqli_error($con));
     }
     disconnect($con);
+
 }
 
 // TEST ADDED TO SETUP
@@ -227,9 +231,17 @@ function updateLastFilmFetch($dt) {
 
 function getFilmsUpdateDB($dt){
     $films = getFilmsFromWeb($dt);
-    addFilmsToStagingArea($films);
-    updateLastFilmFetch($dt);
-    mail('rw251@yahoo.co.uk', 'New films found', 'New films found on '. $dt . '. Number found: ' . sizeof($films));
+
+    if(sizeof($films)==0) {
+        $GLOBALS['noOfDays'] = $GLOBALS['noOfDays'] - 1;
+        if($GLOBALS['noOfDays']>-1) {
+            doBatch($GLOBALS['noOfDays']);
+        }
+    } else {
+        addFilmsToStagingArea($films);
+        updateLastFilmFetch($dt);
+        mail('rw251@yahoo.co.uk', 'New films found', 'New films found on '. $dt . '. Number found: ' . sizeof($films));
+    }
 }
 
 // TEST ADDED TO SETUP
@@ -308,10 +320,13 @@ function mailUserFilms() {
     disconnect($con);
 };
 
-function doBatch() {
-    $dateInThreeDaysTime = getDateOfThreeDaysHence();
+function doBatch($n=3) {
+    $GLOBALS['noOfDays'] = $n;
+    $dateInNDaysTime = getDateOfNDaysHence($n);
+    print_r(getDateOfLastFilmFetch());
+    print_r($dateInNDaysTime); 
     
-    if(getDateOfLastFilmFetch() == $dateInThreeDaysTime) {
+    if(getDateOfLastFilmFetch() == $dateInNDaysTime) {
         //get 15 rows and update
         $films = getNRowsFromStagingArea(15);
         if(sizeof($films)>0){
@@ -329,7 +344,7 @@ function doBatch() {
             }
         }
     } else {
-        getFilmsUpdateDB($dateInThreeDaysTime);
+        getFilmsUpdateDB($dateInNDaysTime);
     }
 };
 
