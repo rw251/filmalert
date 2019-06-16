@@ -1,0 +1,65 @@
+html {   overflow-y: scroll; } 
+body {
+  margin: 0px;
+  font-family: arial;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.loader {
+  width: 100px;
+  display: none;
+}
+.caret-reversed {
+  border-top-width: 0;
+  border-bottom: 4px solid #000000;
+}
+.pointer {
+  cursor: pointer;
+}
+.header,
+.marketing,
+.footer {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+/* Custom page header */
+
+/* Make the masthead heading the same height as the navigation */
+
+.header h3 {
+  padding-bottom: 19px;
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 40px;
+}
+
+/* Customize container */
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 730px;
+  }
+}
+/* Responsive: Portrait tablets and up */
+
+@media screen and (min-width: 768px) {
+  /* Remove the padding we set earlier */
+  .header,
+  .marketing,
+  .footer {
+    padding-right: 0;
+    padding-left: 0;
+  }
+  /* Space out the masthead */
+  .header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+}
+.devsite-avatar {
+    border-radius: 50%;
+    height: 40px;
+    vertical-align: top;
+    width: 40px;
+    cursor: pointer;
+}

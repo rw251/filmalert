@@ -1,9 +1,6 @@
 node_modules/
-dist/
+public_html/
 .vscode/
 .env
 
 npm-debug.log
-php.ini
-composer.phar
-config.php
