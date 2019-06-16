@@ -23,7 +23,7 @@ module.exports = (env, argv) => {
   const isDev = argv.mode !== 'production';
   const config = {
     output: {
-      path: path.join(__dirname, 'public_html', 'film'),
+      path: path.join(__dirname, 'dist', 'public_html', 'film'),
       publicPath,
       filename: '[hash].js',
       chunkFilename: '[chunkhash].js',
@@ -42,7 +42,7 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.html$/,
-          include: path.resolve(__dirname, 'src'),
+          include: path.resolve(__dirname, 'src', 'client'),
           use: [
             {
               loader: 'html-loader',
@@ -52,7 +52,7 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.scss$/,
-          include: path.resolve(__dirname, 'src', 'styles'),
+          include: path.resolve(__dirname, 'src', 'client', 'styles'),
           use: [
             'style-loader',
             MiniCssExtractPlugin.loader,
@@ -64,7 +64,7 @@ module.exports = (env, argv) => {
       ],
     },
     devServer: {
-      contentBase: path.join(__dirname, 'public_html', 'film'),
+      contentBase: path.join(__dirname, 'dist', 'public_html', 'film'),
       compress: true,
       historyApiFallback: {
         index: '/index.html',
@@ -73,7 +73,7 @@ module.exports = (env, argv) => {
     plugins: [
       new CleanWebpackPlugin(),
       new HtmlWebPackPlugin({
-        template: './src/index.html',
+        template: path.resolve(__dirname, 'src', 'client', 'index.html'),
         filename: './index.html',
       }),
       !isDev &&
@@ -104,7 +104,8 @@ module.exports = (env, argv) => {
         filename: isDev ? '[name].css' : '[name].[hash].css',
         chunkFilename: isDev ? '[id].css' : '[id].[hash].css',
       }),
-      new CopyWebpackPlugin([{ from: './src/static' }]),
+      new CopyWebpackPlugin([{ from: './src/client/static' }]),
+      new CopyWebpackPlugin([{ from: './src/server', to: path.join(__dirname, 'dist')}]),
       new WorkboxPlugin.GenerateSW({
         // these options encourage the ServiceWorkers to get in there fast
         // and not allow any straggling "old" SWs to hang around

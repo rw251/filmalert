@@ -1,12 +1,11 @@
-import './client/styles/main.scss';
-
-const filmalert = require('./client/scripts/filmalert');
-const auth = require('./client/scripts/auth')(() => {
+import './styles/main.scss';
+const filmalert = require('./scripts/filmalert');
+const auth = require('./scripts/auth')(() => {
   filmalert.showActions();
 }, () => {
   filmalert.getMyFilms();
 });
-const my = require('./client/scripts/myQuery');
+const my = require('./scripts/myQuery');
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
