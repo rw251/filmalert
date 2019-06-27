@@ -5,7 +5,6 @@ const RollbarDeployPlugin = require('rollbar-deploy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-//const WorkboxPlugin = require('workbox-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const path = require('path');
 const { execSync } = require('child_process');
@@ -106,7 +105,6 @@ module.exports = (env, argv) => {
         chunkFilename: isDev ? '[id].css' : '[id].[hash].css',
       }),
       new CopyWebpackPlugin([{ from: './src/client/static' }]),
-      new CopyWebpackPlugin([{ from: './src/server', to: path.join(__dirname, 'dist')}]),
       new CopyWebpackPlugin([
         {
           from: './src/client/service-worker.js',

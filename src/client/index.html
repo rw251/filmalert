@@ -164,69 +164,6 @@
   </div>
 
   <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=default,fetch"></script>
-
-  <!-- The core Firebase JS SDK is always required and must be listed first -->
-  <!-- <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script> -->
-  <!-- TODO: Add SDKs for Firebase products that you want to use
-      https://firebase.google.com/docs/web/setup#config-web-app -->
-
-  <!-- <script>
-    // Your web app's Firebase configuration
-    var firebaseConfig = {
-      apiKey: "AIzaSyBoM5zfz2qhDbCPps4gIu9q2hPrtQefJk0",
-      authDomain: "annular-strata-742.firebaseapp.com",
-      databaseURL: "https://annular-strata-742.firebaseio.com",
-      projectId: "annular-strata-742",
-      storageBucket: "",
-      messagingSenderId: "750259488516",
-      appId: "1:750259488516:web:7d689741fba962be"
-    };
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    firebase.auth().onAuthStateChanged(function(user) {
-      $signIn = document.getElementById('signin');
-      $profile = document.getElementById('profile');
-      $username = document.getElementById('username');
-      $userpic = document.getElementById('userpic');
-      if (user) {
-        console.log(user);
-        $signIn.style.display = 'none';
-        $profile.style.display = 'block';
-        $username.innerText = user.displayName;
-        $userpic.src = user.photoURL;
-      } else {
-        $signIn.style.display = 'block';
-        $profile.style.display = 'none';
-      }
-    });
-  </script>
-  <script>
-    function callGoogleSignOut(){
-      firebase.auth().signOut();
-    }
-    function callGoogleSignIn(){
-        var provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider).then(function(result) {
-             // This gives you a Google Access Token. You can use it to access the Google API.
-              var token = result.credential.accessToken;
-             // The signed-in user info.
-             var user = result.user;
-             console.log(user)
-             // ...
-       }).catch(function(error) {
-           // Handle Errors here.
-             var errorCode = error.code;
-             var errorMessage = error.message;
-             // The email of the user's account used.
-             var email = error.email;
-             // The firebase.auth.AuthCredential type that was used.
-             var credential = error.credential;
-          // ...
-       });
-    }
-  </script> -->
   
 </body>
 </html>
