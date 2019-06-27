@@ -1,0 +1,41 @@
+:root {
+  --white: #000;
+  --grey-light: #666;
+  --blue-light: #1073BA;
+}
+
+.film {
+  list-style: none;
+
+  &__title {
+    margin-top: 0.8rem;
+    margin-bottom: 0.4rem;
+    color: var(--white);
+  }
+
+  &__poster {
+    height: 5rem;
+    object-fit: cover;
+    border-radius: 1.05rem;
+    box-shadow: 0 0.6rem 1rem rgba(0, 0, 0, 0.4);
+  }
+
+  &__image {
+    position: relative;
+  }
+
+  &__add {
+    background-color: var(--blue-light);
+    color: var(--white);
+    text-decoration: none;
+    padding: 1.4rem;
+    border-radius: 2rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    transition: all .3s;
+
+    &:hover {
+      background-color: #1073BA;
+    }
+  }
+}

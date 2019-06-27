@@ -1,65 +1,64 @@
-html {   overflow-y: scroll; } 
+@import 'filmSearchBox';
+
+html { overflow-y: scroll; } 
 body {
   margin: 0px;
   font-family: arial;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  background-color: lightpink;
 }
 .loader {
   width: 100px;
   display: none;
 }
-.caret-reversed {
-  border-top-width: 0;
-  border-bottom: 4px solid #000000;
-}
 .pointer {
   cursor: pointer;
 }
-.header,
-.marketing,
-.footer {
-  padding-right: 15px;
-  padding-left: 15px;
-}
-/* Custom page header */
 
-/* Make the masthead heading the same height as the navigation */
-
-.header h3 {
-  padding-bottom: 19px;
-  margin-top: 0;
-  margin-bottom: 0;
-  line-height: 40px;
-}
-
-/* Customize container */
-
-@media (min-width: 768px) {
-  .container {
-    max-width: 730px;
+@media (max-width: 500px) {
+  header {
+    grid-template-columns: 150px 1fr;
+  }
+  .title {
+    grid-column: 1;
   }
 }
-/* Responsive: Portrait tablets and up */
 
-@media screen and (min-width: 768px) {
-  /* Remove the padding we set earlier */
-  .header,
-  .marketing,
-  .footer {
-    padding-right: 0;
-    padding-left: 0;
+@media (max-width: 400px) {
+  header {
+    grid-template-columns: 150px 1fr;
   }
-  /* Space out the masthead */
-  .header {
-    margin-bottom: 30px;
-    border-bottom: 1px solid #e5e5e5;
+  .title {
+    grid-column: 1;
+  }
+  .search-box {
+    width: calc(100% - 10px);
   }
 }
-.devsite-avatar {
-    border-radius: 50%;
-    height: 40px;
-    vertical-align: top;
-    width: 40px;
-    cursor: pointer;
+
+.film__remove {
+  transition: transform 0.4s ease-in-out;
+}
+
+.film__remove.rotate {
+  transform: rotate3d(0,1,0,90deg);
+}
+
+.nice-button {
+  padding: 25px 45px;
+  font-size: 1.8rem;
+  position: relative;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 0;
+  background-color: #fff;
+  color: #000;
+  -webkit-box-shadow: 0px 0px 15px 0px rgba(255,255,255,0.81);
+  -moz-box-shadow: 0px 0px 15px 0px rgba(255,255,255,0.81);
+  box-shadow: 0px 0px 15px 0px rgba(255,255,255,0.81);
+  cursor: pointer;
+  overflow: hidden;
+  margin: 5px;
+  min-width: 220px;
 }

@@ -1,3 +1,14 @@
+To setup the firebase stuff:
+
+1. Set env variables
+From command line do:
+cd src/firebase/
+../../node_modules/.bin/firebase functions:config:set todoist.clientid="<INSERT>"
+../../node_modules/.bin/firebase functions:config:set todoist.clientsecret="<INSERT>"
+2. Deploy functions
+cd src/firebase/
+../../node_modules/.bin/firebase deploy --only functions
+
 // move relevant php.ini.* to php.ini
 cp php.windows.ini php.ini
 

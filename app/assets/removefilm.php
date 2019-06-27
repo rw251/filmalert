@@ -2,7 +2,7 @@
 
 include 'dbConnect.php'; //exposes a $con object and $userId
 
-require_once '../vendor/autoload.php';
+require_once '../../vendor/autoload.php';
 use Symfony\Component\HttpFoundation\Response;
 
 $imdbId = $_POST['imdbId'];

@@ -5,7 +5,8 @@ const RollbarDeployPlugin = require('rollbar-deploy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const WorkboxPlugin = require('workbox-webpack-plugin');
+//const WorkboxPlugin = require('workbox-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 const path = require('path');
 const { execSync } = require('child_process');
 const { version } = require('./package.json');
@@ -74,7 +75,7 @@ module.exports = (env, argv) => {
       new CleanWebpackPlugin(),
       new HtmlWebPackPlugin({
         template: path.resolve(__dirname, 'src', 'client', 'index.html'),
-        filename: './index.html',
+        filename: 'index.html',
       }),
       !isDev &&
       new HtmlReplaceWebpackPlugin([
@@ -106,28 +107,43 @@ module.exports = (env, argv) => {
       }),
       new CopyWebpackPlugin([{ from: './src/client/static' }]),
       new CopyWebpackPlugin([{ from: './src/server', to: path.join(__dirname, 'dist')}]),
-      new WorkboxPlugin.GenerateSW({
-        // these options encourage the ServiceWorkers to get in there fast
-        // and not allow any straggling "old" SWs to hang around
-        clientsClaim: true,
-        skipWaiting: true,
-        exclude: [
-          /\.map$/,
-          /^manifest.*\.js(?:on)?$/,
-          /\.htaccess/,
-        ],
-        navigateFallback: '/',
-        runtimeCaching: [
-          {
-            urlPattern: /^http.*polyfill.min.js/,
-            handler: 'staleWhileRevalidate',
-          },
-          {
-            urlPattern: /^http.*rollbar.min.js/,
-            handler: 'staleWhileRevalidate',
-          },
-        ],
-      }),
+      new CopyWebpackPlugin([
+        {
+          from: './src/client/service-worker.js',
+          transform (content) {
+            const parsed = content.toString().replace(/\{\{VERSION\}\}/g, version).replace(/\{\{RANDOM\}\}/g, Math.random());
+            return Buffer.from(parsed, 'utf8');
+          }
+        }
+      ]),
+      new ManifestPlugin({fileName: 'webpack-manifest.json'}),
+      // new WorkboxPlugin.GenerateSW({
+      //   // these options encourage the ServiceWorkers to get in there fast
+      //   // and not allow any straggling "old" SWs to hang around
+      //   clientsClaim: true,
+      //   skipWaiting: true,
+      //   exclude: [
+      //     /\.map$/,
+      //     /^manifest.*\.js(?:on)?$/,
+      //     /\.htaccess/,
+      //     /\.php$/,
+      //   ],
+      //   navigateFallback: '/',
+      //   runtimeCaching: [
+      //     {
+      //       urlPattern: /^http.*polyfill.min.js/,
+      //       handler: 'staleWhileRevalidate',
+      //     },
+      //     {
+      //       urlPattern: /^http.*rollbar.min.js/,
+      //       handler: 'staleWhileRevalidate',
+      //     },
+      //     {
+      //       urlPattern: /index.html/,
+      //       handler: 'staleWhileRevalidate',
+      //     },
+      //   ],
+      // }),
     ].filter(Boolean),
     devtool: isDev ? 'eval-source-map' : 'hidden-source-map',
   };
