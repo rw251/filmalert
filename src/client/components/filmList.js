@@ -1,7 +1,8 @@
-import { getFilms, removeFilm } from '../scripts/firebase';
+import { getFilms, removeFilm, listUpcomingFilms } from '../scripts/firebase';
 import { subscribe } from '../scripts/pubsub';
 
 const $myFilms = document.getElementById('myFilms');
+const $upcomingFilms = document.getElementById('upcomingFilms');
 
 const renderFilms = (films) => {
   $myFilms.innerHTML = films.map((film) => `
@@ -18,7 +19,18 @@ const renderFilms = (films) => {
   `).join('');
 };
 
-const render = () => getFilms().then(renderFilms);
+const renderUpcomingFilms = (films) => {
+  $upcomingFilms.innerHTML = films
+    .sort((a,b) => new Date(a.time) - new Date(b.time))
+    .map((film) => `
+      <li style="line-height: 45px; align-items: center;">
+        <span>${film.title} (${film.year}) : ${film.channel} on ${film.time}</span>
+      </li>
+    `)
+    .join('');
+};
+
+const render = () => getFilms().then(renderFilms).then(listUpcomingFilms).then(renderUpcomingFilms);
 const clear = () => renderFilms([]);
 
 $myFilms.addEventListener('click', (el) => {

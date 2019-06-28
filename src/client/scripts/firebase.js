@@ -127,5 +127,15 @@ const removeFilm = (imdbId) => db
     console.log(imdbId, 'film removed');
   });
 
+const listUpcomingFilms = () => db
+  .collection('films')
+  .get()
+  .then((snapshot) => {
+    const xx = Array.from(snapshot.docs);
+    const y = xx.map((x) => {
+      return {imdbId: x.id, ...x.data()};
+    });
+    return y;
+  })
 
-export { getFilms, addFilmToFirebase, removeFilm, setTodoistState };
+export { getFilms, addFilmToFirebase, removeFilm, setTodoistState, listUpcomingFilms };
