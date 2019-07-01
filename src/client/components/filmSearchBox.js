@@ -33,7 +33,9 @@ const findFilm = (title) => fetch(`https://www.omdbapi.com/?apikey=672fc152&s=${
 const addFilm = (el) => {
   if(el.target.nodeName.toLowerCase() === 'a') {
     const {imdbId, title, year} = el.target.dataset;
-    addFilmToFirebase(title, year, imdbId)
+    let ttImdbId = imdbId;
+    if(imdbId[0] === 't' && ttImdbId[1] === 't') ttImdbId = imdbId.substr(2);
+    addFilmToFirebase(title, year, ttImdbId)
       .then(() => {
         $results.innerText = `${title} successfully added`;
       })

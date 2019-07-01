@@ -5,6 +5,7 @@ From command line do:
 cd src/firebase/
 ../../node_modules/.bin/firebase functions:config:set todoist.clientid="<INSERT>"
 ../../node_modules/.bin/firebase functions:config:set todoist.clientsecret="<INSERT>"
+../../node_modules/.bin/firebase functions:config:set mailgun.password="<INSERT>"
 2. Deploy functions
 cd src/firebase/
 ../../node_modules/.bin/firebase deploy --only functions

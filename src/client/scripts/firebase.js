@@ -108,7 +108,7 @@ firebase.auth().onAuthStateChanged((user) => {
 const addFilmToFirebase = (title, year, imdbId) => db
   .collection("users")
   .doc(firebase.auth().currentUser.uid)
-  .collection("films")
+  .collection('films')
   .doc(imdbId)
   .set({ title, year })
   .then(() => {
@@ -119,7 +119,7 @@ const addFilmToFirebase = (title, year, imdbId) => db
 const removeFilm = (imdbId) => db
   .collection("users")
   .doc(firebase.auth().currentUser.uid)
-  .collection("films")
+  .collection('films')
   .doc(imdbId)
   .delete()
   .then(() => {

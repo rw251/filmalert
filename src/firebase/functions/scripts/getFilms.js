@@ -8,6 +8,15 @@ const validateFilm = (film, date) => {
   if (!film.imdb || film.imdb[0] !== 't' || film.imdb[1] !== 't') return false;
   if (!film.time || film.time.indexOf('-') < 0) return false;
   film.time = `${date} ${film.time.split('-')[0].replace(/ /g, '')}:00`;
+
+  // Check it's still today
+  const actualDateInMS = (new Date(date)).getTime();
+  const actualTimeInMS = (new Date(film.time)).getTime();
+  if(Math.abs(actualDateInMS - actualTimeInMS) > 48*60*60*1000) return false;
+
+  // Check the year is a year
+  if(!/^[12][0-9]{3}$/.test(film.year)) film.year = "????";
+
   film.imdb = film.imdb.slice(2);
   return film;
 };
@@ -48,15 +57,31 @@ const getFilms = (id, date) => rp({
     }
   }));
 
+const timeToRemoveFrom = () => {
+  const now = new Date();
+  now.setHours(now.getHours() - 4);
+  return now.toISOString().split("T").reduce((date, time) => date + ' ' + time.substr(0,5))
+}
+
 const filmModule = (admin) => {
   /**
-   * Removes all films that were on in the past that
-   * are on nobodies list
-   * @param {String} date The date to tidy from
+   * Removes all films that were on in the past
    * @returns {Promise} A promise that resolves when the delete is executed
    */
-  const tidyFilms = date => admin.firestore()
-    .collection('films');
+  const tidyFilms = () => {
+    const batch = admin.firestore().batch();
+    return admin.firestore()
+      .collection('films')
+      .where("time", "<", timeToRemoveFrom())
+      .get()
+      .then((snapshot) => {
+        snapshot.docs.forEach(doc => {
+          batch.delete(doc.ref);
+        });
+        return batch.commit();
+      });
+  }
+
 
   const insertNewFilms = (films) => {
     let batch = admin.firestore().batch();    
@@ -82,11 +107,12 @@ const filmModule = (admin) => {
       dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
       const dayAfterTomorrowAsShortDate = dayAfterTomorrow.toISOString().substr(0, 10);
 
-      return Promise.all([
+      return tidyFilms()
+        .then(() => Promise.all([
           getFilms(0, nowAsShortDate),
           getFilms(1, tomorrowAsShortDate),
           getFilms(2, dayAfterTomorrowAsShortDate),
-        ])
+        ]))
         .then(() => Object.keys(filmObj).map(id => filmObj[id]))
         .then(films => insertNewFilms(films))
         .catch(err => console.log(err))
