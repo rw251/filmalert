@@ -60,13 +60,13 @@ const setTodoistState = () => {
     .then(() => uuid);
 };
 
-const upsertUser = (name) => db
+const upsertUser = (name, email) => db
   .collection('users')
   .doc(firebase.auth().currentUser.uid)
   .get()
   .then((user) => user.exists
     ? Promise.resolve({ state: user.get('todoistState'), isToken: !!user.get('todoistToken') })
-    : db.collection('users').doc(firebase.auth().currentUser.uid).set({ name })
+    : db.collection('users').doc(firebase.auth().currentUser.uid).set({ name, email })
   );
 
 firebase.auth().onAuthStateChanged((user) => {
@@ -75,7 +75,7 @@ firebase.auth().onAuthStateChanged((user) => {
     $profile.style.display = 'block';
 
     $userpic.style.backgroundImage = `url(${user.photoURL})`;
-    upsertUser(user.displayName || 'unknown')
+    upsertUser(user.displayName || 'unknown', user.email)
       .then(({ state, isToken }) => {
         publish('USER_LOGGED_IN');
         

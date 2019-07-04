@@ -44,19 +44,9 @@ const constructEmail = (to, films) => ({
   from: 'Film Alert <film@mg.rw251.com>',
   to,
   subject: 'Upcoming films',
-  text: `Upcoming films: ${films.map(x => `${x.film} - ${x.channel} - ${x.when}`).join(', ')}`,
-  html: `<p>Upcoming films:</p><p><ul>${films.map(x => `<li>${x.film} is on ${x.channel} at ${x.when}</li>`).join('')}</ul></p>`,
+  text: `Upcoming films: ${films.map(x => `${x.title} - ${x.channel} - ${x.time}`).join(', ')}`,
+  html: `<p>Upcoming films:</p><p><ul>${films.map(x => `<li>${x.title} is on ${x.channel} at ${x.time}</li>`).join('')}</ul></p>`,
 });
-
-const constructEmails = films => films.reduce((emailObject, nextEmail) => {
-  const { openid: email, film, channel, when } = nextEmail;
-  if (!emailObject[email]) {
-    emailObject[email] = [{ film, channel, when }];
-  } else {
-    emailObject[email].push({ film, channel, when });
-  }
-  return emailObject;
-}, {});
 
 const timeToSearchFrom = () => {
   const now = new Date();
@@ -64,27 +54,58 @@ const timeToSearchFrom = () => {
   return now.toISOString().split("T").reduce((date, time) => date + ' ' + time.substr(0,5))
 }
 
+const addTasksToTodoist = (token, films) => Promise.all(films.map((film) => rp({
+  uri: 'https://todoist.com/api/v8/items/add',
+  method: 'POST',
+  body: {
+    token,
+    content: 'Record or delete ' + film.title+'. It\'s on ' + film.channel + ' at ' + film.time,
+    priority: 4,
+    date_string: 'today',
+  },
+  json: true,
+})));
+
 const notifyModule = (admin) => {
 
   const getUpcomingFilms = () => admin.firestore()
     .collection('films')
     .where("time", ">", timeToSearchFrom())
     .get()
-    .then((snapshot) => Array.from(snapshot.docs).reduce((filmObj, film) => {
+    .then((snapshot) => snapshot.docs.reduce((filmObj, film) => {
       const { users, channel, time, title} = film.data();
       if(!users || Object.keys(users).length === 0) return filmObj;
       Object.keys(users).forEach((userId) => {
-        const email = ''; //TODO lookup email or put this into the user object
-        if(!filmObj[email]) filmObj[email] = [ { title, channel, when}];
-        else filmObj[email].push({ title, channel, when});
+        if(!filmObj[userId]) filmObj[userId] = [ { title, channel, time}];
+        else filmObj[userId].push({ title, channel, time});
       });
       return filmObj;
-    }, {}));  
+    }, {}));
+
+  const getEmail = (userId) => admin.firestore()
+    .collection('users')
+    .doc(userId)
+    .get()
+    .then((user) => user.data());
 
   return { 
-    getFilmsToSend: async (req, res) => getFilmsForUsers()
-      .then(x => res.send({its: 'done'}))
-      .catch((err) => res.send(err))
+    getFilmsToSend: (context) => getUpcomingFilms()
+      .then(films => {
+        const emailPromises = Object.keys(films).map((userId) => getEmail(userId)
+          .then(({email, todoistToken}) => Promise.all([
+            constructEmail(email, films[userId]),
+            addTasksToTodoist(todoistToken, films[userId]),
+          ]))
+          .then(([email]) => sendEmail(email)));
+        console.log(`Sending ${emailPromises.length} emails`);
+        return Promise.all(emailPromises);
+      })
+      .catch((err) => {
+        console.log('Something went wrong', err);
+      })
+      .finally(() => {
+        console.log('done');
+      })
   };
 };
 

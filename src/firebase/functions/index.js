@@ -5,12 +5,12 @@ admin.initializeApp();
 
 const todoist = require('./scripts/todoist')(admin);
 const films = require('./scripts/getFilms')(admin);
-// const notify = require('./scripts/notify')(admin);
+const notify = require('./scripts/notify')(admin);
 
 // Takes an auth code, posts to todoist, and receives an access token
 exports.todoistOauth = functions.https.onRequest(todoist.oauth);
 exports.getFilmsCron = functions.pubsub.schedule('30 */4 * * *').onRun(films.getFilmsCron);
-//exports.notifyCron = functions.https.onRequest(notify.getFilmsToSend);
+exports.notificationCron = functions.pubsub.schedule('0 9 * * *').onRun(notify.getFilmsToSend);
 
 const incUserCount = (userId) => admin.firestore()
   .collection('counts')
