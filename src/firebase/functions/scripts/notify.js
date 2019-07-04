@@ -1,6 +1,6 @@
-// const functions = require('firebase-functions');
-// const rp = require('request-promise');
-// const mg = require('mailgun-js');
+const functions = require('firebase-functions');
+const rp = require('request-promise');
+const mg = require('mailgun-js');
 
 
 // /*
@@ -26,100 +26,66 @@
 // */
 
 
-// const { password } = functions.config().mailgun;
-// const mailgun = mg({apiKey: password, domain: 'mg.rw251.com'});
+const { password } = functions.config().mailgun;
+const mailgun = mg({apiKey: password, domain: 'mg.rw251.com'});
 
-// const sendEmail = message => new Promise((resolve, reject) => {
-//   mailgun.messages().send(message, (error, body) => {
-//     if(error) {
-//       console.log(error);
-//       reject(new Error('sending mail failed'));
-//     } else {
-//       resolve(body);
-//     }
-//   })
-// });
+const sendEmail = message => new Promise((resolve, reject) => {
+  mailgun.messages().send(message, (error, body) => {
+    if(error) {
+      console.log(error);
+      reject(new Error('sending mail failed'));
+    } else {
+      resolve(body);
+    }
+  })
+});
 
-// const constructEmail = (to, films) => ({
-//   from: 'Film Alert <film@mg.rw251.com>',
-//   to,
-//   subject: 'Upcoming films',
-//   text: `Upcoming films: ${films.map(x => `${x.film} - ${x.channel} - ${x.when}`).join(', ')}`,
-//   html: `<p>Upcoming films:</p><p><ul>${films.map(x => `<li>${x.film} is on ${x.channel} at ${x.when}</li>`).join('')}</ul></p>`,
-// });
+const constructEmail = (to, films) => ({
+  from: 'Film Alert <film@mg.rw251.com>',
+  to,
+  subject: 'Upcoming films',
+  text: `Upcoming films: ${films.map(x => `${x.film} - ${x.channel} - ${x.when}`).join(', ')}`,
+  html: `<p>Upcoming films:</p><p><ul>${films.map(x => `<li>${x.film} is on ${x.channel} at ${x.when}</li>`).join('')}</ul></p>`,
+});
 
-// const constructEmails = films => films.reduce((emailObject, nextEmail) => {
-//   const { openid: email, film, channel, when } = nextEmail;
-//   if (!emailObject[email]) {
-//     emailObject[email] = [{ film, channel, when }];
-//   } else {
-//     emailObject[email].push({ film, channel, when });
-//   }
-//   return emailObject;
-// }, {});
+const constructEmails = films => films.reduce((emailObject, nextEmail) => {
+  const { openid: email, film, channel, when } = nextEmail;
+  if (!emailObject[email]) {
+    emailObject[email] = [{ film, channel, when }];
+  } else {
+    emailObject[email].push({ film, channel, when });
+  }
+  return emailObject;
+}, {});
 
-// const getFilmsToSend = () => 
+const timeToSearchFrom = () => {
+  const now = new Date();
+  now.setHours(now.getHours() - 1);
+  return now.toISOString().split("T").reduce((date, time) => date + ' ' + time.substr(0,5))
+}
 
-// DB
-//   .query('SELECT `film`, `channel`, `when`, `openid` FROM `film` f INNER JOIN `user_films` uf on uf.filmId = f.id INNER JOIN `users` u on u.id = uf.userId WHERE `when` > now()')
-//   .then((results) => {
-//     if (results && results.length > 0) {
-//       const emails = constructEmails(results);
-//       const emailPromises = Object.keys(emails).map((to) => {
-//         const mail = constructEmail(to, emails[to]);
-//         console.log(mail);
-//         return sendEmail(mail);
-//       });
-//       console.log(`Sending ${emailPromises.length} emails about ${results.length} films`);
-//       return Promise.all(emailPromises);
-//     }
-//     return false;
-//   });
+const notifyModule = (admin) => {
 
-// // getFilmsToSend()
-// //   .then(() => console.log('DONE!'))
-// //   .catch(err => console.log(err))
-// //   .finally(() => DB.close());
+  const getUpcomingFilms = () => admin.firestore()
+    .collection('films')
+    .where("time", ">", timeToSearchFrom())
+    .get()
+    .then((snapshot) => Array.from(snapshot.docs).reduce((filmObj, film) => {
+      const { users, channel, time, title} = film.data();
+      if(!users || Object.keys(users).length === 0) return filmObj;
+      Object.keys(users).forEach((userId) => {
+        const email = ''; //TODO lookup email or put this into the user object
+        if(!filmObj[email]) filmObj[email] = [ { title, channel, when}];
+        else filmObj[email].push({ title, channel, when});
+      });
+      return filmObj;
+    }, {}));  
 
-// const notifyModule = (admin) => {
+  return { 
+    getFilmsToSend: async (req, res) => getFilmsForUsers()
+      .then(x => res.send({its: 'done'}))
+      .catch((err) => res.send(err))
+  };
+};
 
-//   const getUpcomingFilms = () => admin.firestore()
-//     .collection('films')
-//     .get()
-//     .then((snapshot) => Array.from(snapshot.docs).reduce((filmObj, film) => {
-//       if(!filmObj[film.id]) {
-//         filmObj[film.id] = film.data();
-//       }
-//       return filmObj;
-//     }, {}));
-  
-//   const getUserRefs = () => admin.firestore()
-//     .collection('users')
-//     .get()
-//     .then((snapshot) => snapshot.docs);
-  
-//   const getFilmsForUsers = () => Promise.all([
-//     getUpcomingFilms(),
-//     getUserRefs(),
-//   ])
-//     .then(([films, users]) => {
-//       const filmIds = Object.keys(films).map(x => `tt${x}`);
-//       return users.forEach((user) => {
-//         user.ref.collection('films').get()
-//           .then((filmSnapshot) => {
-            
-//           })
-//         console.log(filmIds);
-//         console.log(user.films);
-//         const filmsOnSoon = user.films.filter(x => filmIds.indexOf(x) > -1);
-//       });
-//     });
-
-//   return { 
-//     getFilmsToSend: async (req, res) => getFilmsForUsers()
-//       .then(x => res.send({its: 'done'}))
-//       .catch((err) => res.send(err))
-//   };
-// };
-
-// module.exports = notifyModule;
+module.exports = notifyModule;

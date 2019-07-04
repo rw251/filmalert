@@ -22,19 +22,24 @@ const decUserCount = (userId) => admin.firestore()
   .doc(userId)
   .set({ filmCount: admin.firestore.FieldValue.increment(-1) }, {merge: true});
 
-const addToFilms = (imdbId, userId) => admin.firestore()
-  .collection('films')
-  .doc(imdbId)
-  .collection('users')
-  .doc(userId)
-  .set({ want: true});
+const addToFilms = (imdbId, userId) => {
+  var toInsert = { users: {} };
+  toInsert.users[userId] = true;
+  return admin.firestore()
+    .collection('films')
+    .doc(imdbId)
+    .set(toInsert, {merge: true});
+};
+  //.set({ [`users.${userId}`] : true}, {merge: true});
 
-const removeFromFilms = (imdbId, userId) => admin.firestore()
-  .collection('films')
-  .doc(imdbId)
-  .collection('users')
-  .doc(userId)
-  .delete();
+const removeFromFilms = (imdbId, userId) => {
+  var toDelete = {};
+  toDelete[`users.${userId}`] = admin.firestore.FieldValue.delete();
+  return admin.firestore()
+    .collection('films')
+    .doc(imdbId)
+    .update(toDelete);
+};
 
 exports.addFilm = functions.firestore
   .document('users/{userId}/films/{imdbId}')
@@ -42,7 +47,7 @@ exports.addFilm = functions.firestore
     const { userId, imdbId } = context.params;
     return incUserCount(userId).then(() => addToFilms(imdbId, userId));
   });
-exports.aremoveFilm = functions.firestore
+exports.removeFilm = functions.firestore
   .document('users/{userId}/films/{imdbId}')
   .onDelete((snap, context) => {
     const { userId, imdbId } = context.params;

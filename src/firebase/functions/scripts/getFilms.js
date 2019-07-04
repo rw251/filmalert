@@ -76,7 +76,8 @@ const filmModule = (admin) => {
       .get()
       .then((snapshot) => {
         snapshot.docs.forEach(doc => {
-          batch.delete(doc.ref);
+          if(!doc.data().users || Object.keys(doc.data().users).length === 0)
+            batch.delete(doc.ref);
         });
         return batch.commit();
       });
