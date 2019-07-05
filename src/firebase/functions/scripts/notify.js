@@ -1,6 +1,6 @@
 const sendEmail = require('../utilities/send-email')();
 const addTasksToTodoist = require('../utilities/add-tasks-to-todoist');
-const dateFormatter = require('../../../shared/date-formatter');
+const dateFormatter = require('../utilities/date-formatter');
 
 const constructEmail = (to, films) => ({
   from: 'Film Alert <film@mg.rw251.com>',

@@ -6,7 +6,7 @@ const addFilms = require('../utilities/test-add-films')(admin, config);
 const addUsers = require('../utilities/test-add-users')(admin, config);
 const removeFilms = require('../utilities/test-remove-films')(admin, config);
 const removeUsers = require('../utilities/test-remove-users')(admin, config);
-const dateFormat = require('../../../shared/date-formatter');
+const dateFormat = require('../utilities/date-formatter');
 
 const notify = require('../scripts/notify')(admin, config);
 
