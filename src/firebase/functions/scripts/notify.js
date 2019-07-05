@@ -89,7 +89,7 @@ const notifyModule = (admin) => {
     .then((user) => user.data());
 
   return { 
-    getFilmsToSend: (context) => getUpcomingFilms()
+    getFilmsToSend: () => getUpcomingFilms()
       .then(films => {
         const emailPromises = Object.keys(films).map((userId) => getEmail(userId)
           .then(({email, todoistToken}) => Promise.all([

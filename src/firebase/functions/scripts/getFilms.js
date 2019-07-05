@@ -88,7 +88,7 @@ const filmModule = (admin) => {
     let batch = admin.firestore().batch();    
     films.forEach(x => {
       let newFilm = admin.firestore().collection('films').doc(x.imdb);
-      batch.set(newFilm, x);
+      batch.set(newFilm, x, { merge: true });
     });
     console.log(`${films.length} films inserting...`);
     return batch.commit();
