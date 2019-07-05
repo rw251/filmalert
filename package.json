@@ -14,7 +14,8 @@
     "deploy:cron": "rsync -az --force --delete --progress -e 'ssh' ./harvester/film/ rw251.com:~/cron/film --exclude=/.ssh --exclude=/.env --exclude=/.logs --exclude=/.cagefs --exclude=/.cl.selector --exclude=/.bash_history --exclude=/node_modules --chmod=Fu=rwx,Fog=rwx",
     "postdeploy": "git push --follow-tags",
     "preserve": "npm run build",
-    "serve": "live-server ./public_html/cdown --port=7399 --entry-file=index.html --quiet --no-browser"
+    "serve": "live-server ./public_html/cdown --port=7399 --entry-file=index.html --quiet --no-browser",
+    "test": "cd src/firebase/functions & npm test"
   },
   "keywords": [],
   "author": "Richard Williams <1234richardwilliams@gmail.com> (https://rw251.github.io)",

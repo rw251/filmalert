@@ -1,11 +1,12 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const config = require('./config');
 
 admin.initializeApp();
 
 const todoist = require('./scripts/todoist')(admin);
-const films = require('./scripts/getFilms')(admin);
-const notify = require('./scripts/notify')(admin);
+const films = require('./scripts/getFilms')(admin, config);
+const notify = require('./scripts/notify')(admin, config);
 
 // Takes an auth code, posts to todoist, and receives an access token
 exports.todoistOauth = functions.https.onRequest(todoist.oauth);
@@ -30,7 +31,6 @@ const addToFilms = (imdbId, userId) => {
     .doc(imdbId)
     .set(toInsert, {merge: true});
 };
-  //.set({ [`users.${userId}`] : true}, {merge: true});
 
 const removeFromFilms = (imdbId, userId) => {
   var toDelete = {};

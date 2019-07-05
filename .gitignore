@@ -7,3 +7,5 @@ dist.1/
 
 npm-debug.log
 config.php
+
+service-account-key.json

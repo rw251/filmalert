@@ -1,4 +1,3 @@
-const functions = require('firebase-functions');
 const $ = require('cheerio');
 const rp = require('request-promise');
 
@@ -63,7 +62,7 @@ const timeToRemoveFrom = () => {
   return now.toISOString().split("T").reduce((date, time) => date + ' ' + time.substr(0,5))
 }
 
-const filmModule = (admin) => {
+const filmModule = (admin, config) => {
   /**
    * Removes all films that were on in the past
    * @returns {Promise} A promise that resolves when the delete is executed
@@ -71,7 +70,7 @@ const filmModule = (admin) => {
   const tidyFilms = () => {
     const batch = admin.firestore().batch();
     return admin.firestore()
-      .collection('films')
+      .collection(config.collections.films)
       .where("time", "<", timeToRemoveFrom())
       .get()
       .then((snapshot) => {
@@ -87,7 +86,7 @@ const filmModule = (admin) => {
   const insertNewFilms = (films) => {
     let batch = admin.firestore().batch();    
     films.forEach(x => {
-      let newFilm = admin.firestore().collection('films').doc(x.imdb);
+      let newFilm = admin.firestore().collection(config.collections.films).doc(x.imdb);
       batch.set(newFilm, x, { merge: true });
     });
     console.log(`${films.length} films inserting...`);
