@@ -4,8 +4,16 @@
   --blue-light: #1073BA;
 }
 
+.films {
+  max-width: 400px;
+  margin: 10px auto;
+}
+
 .film {
   list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
   &__title {
     margin-top: 0.8rem;
