@@ -129,6 +129,7 @@ const removeFilm = (imdbId) => db
 
 const listUpcomingFilms = () => db
   .collection('films')
+  .where('year','>','0')
   .get()
   .then((snapshot) => {
     const xx = Array.from(snapshot.docs);
