@@ -7,7 +7,7 @@
     "build": "webpack --mode development",
     "build:production": "webpack --mode production",
     "predeploy": "npm version patch && npm run build:production",
-    "deploy": "npm run deploy:client && npm run deploy:cron",
+    "deploy": "npm run deploy:client && npm run deploy:firebase",
     "deploy:firebase": "cd src/firebase & firebase deploy --only functions",
     "predeploy:client": "npm run build:production",
     "deploy:client": "rsync -az --force --delete --progress -e 'ssh' ./dist/public_html/film/ rw251.com:~/public_html/film --exclude=/.ssh --exclude=/.logs --exclude=/.cagefs --exclude=/.cl.selector --exclude=/.bash_history",
