@@ -1,6 +1,6 @@
 {
   "name": "filmalert",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "ISC",
   "scripts": {
     "start": "webpack-dev-server --mode development --open --port 9448",
