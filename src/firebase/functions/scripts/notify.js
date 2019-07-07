@@ -6,8 +6,8 @@ const constructEmail = (to, films) => ({
   from: 'Film Alert <film@mg.rw251.com>',
   to,
   subject: 'Upcoming films',
-  text: `Upcoming films: ${films.map(x => `${x.title} - ${x.channel} - ${x.time}`).join(', ')}`,
-  html: `<p>Upcoming films:</p><p><ul>${films.map(x => `<li>${x.title} is on ${x.channel} at ${x.time}</li>`).join('')}</ul></p>`,
+  text: `${films.map(x => `${x.title} - ${x.channel} - ${x.time}`).join(', ')}`,
+  html: `<p><ul>${films.map(x => `<li>${x.title} is on ${x.channel} at ${x.time}</li>`).join('')}</ul></p>`,
 });
 
 const timeToSearchFrom = () => {
