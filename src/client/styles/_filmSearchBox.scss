@@ -7,13 +7,65 @@
 .films {
   max-width: 400px;
   margin: 10px auto;
+  padding-inline-start: 0;
 }
 
 .film {
   list-style: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+
+  &-info {
+    padding-left:10px;  
+    text-align: left;
+    min-width: 0;
+    pointer-events: none;
+  }
+  
+  &-btn-card {
+    height:48px;
+    width: 400px;
+    border: 1px solid lightgrey;
+    border-radius: 2px;
+    display:flex;
+    align-items: center;
+    background-color: #fff;
+    margin-bottom: 2px;
+
+    &:hover {
+      background-color: #000;
+      color: white;
+      box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 4px 1px;
+      cursor: pointer;
+      border:none;
+    }
+  }
+  
+  &-image {
+    background-size: cover;
+    height:100%;
+    width:32px;
+    min-width: 32px;
+  }
+  
+  &-title {
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  &-year {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #777;
+  }
+  
+  &-add {
+    flex-grow: 1;
+    text-align: right;
+    align-self: flex-end;
+    padding: 0 5px 5px 0;
+    pointer-events: none;
+  }
 
   &__title {
     margin-top: 0.8rem;

@@ -12,15 +12,20 @@ const renderFilms = (data) => {
     : `<ul class="films">
     ${data.Search.map((film) => `
       <li class="film">
-        <img class="film__poster" src="${film.Poster}" alt="${film.Title}"/>
-        <span class="film__title">${film.Title} (${film.Year})</span>
-        <a 
-          data-imdb-id="${film.imdbID}" 
-          data-title="${film.Title}" 
-          data-year="${film.Year}"
-          class="film__add" 
-          href="javascript:void(0)"
-        >Add</a>
+        <a class="film-btn-card" data-imdb-id="${film.imdbID}" 
+          data-title="${film.Title}" data-year="${film.Year}">
+          <div class="film-image" style="${film.Poster.indexOf('http')>-1
+            ? `background-image:url('${film.Poster}')`
+            : ``
+          }"></div>
+          <div class="film-info">
+            <div class="film-title">${film.Title}</div>
+            <div class="film-year">${film.Year}</div>
+          </div>
+          <div class="film-add">
+            Add
+          </div>
+        </a>
       </li>
     `).join('')}
   </ul>`;
