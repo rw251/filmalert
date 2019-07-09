@@ -1,10 +1,10 @@
 @import 'filmSearchBox';
 
-html { overflow-y: scroll; } 
 body {
   margin: 0px;
   font-family: arial;
-  background-color: #0fad3f;
+  background-image: linear-gradient(to bottom right, red, yellow);
+  height:100vh;
 }
 .loader {
   width: 100px;

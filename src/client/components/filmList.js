@@ -1,4 +1,4 @@
-import { getFilms, removeFilm, listUpcomingFilms } from '../scripts/firebase';
+import { getFilms, removeFilm } from '../scripts/firebase';
 import { subscribe } from '../scripts/pubsub';
 
 const $myFilms = document.getElementById('myFilms');
@@ -6,7 +6,7 @@ const $upcomingFilms = document.getElementById('upcomingFilms');
 
 const renderFilms = (films) => {
   $myFilms.innerHTML = films.map((film) => `
-    <li style="line-height: 45px; display: grid; grid-template-columns: 1fr 80px; align-items: center;">
+    <li style="line-height: 45px; display: grid; grid-template-columns: 1fr 80px; align-items: center;max-width: 400px;margin:0 auto">
       <span>${film.title} (${film.year})</span>
       <button
         data-imdb-id="${film.imdbId}" 
@@ -30,7 +30,7 @@ const renderUpcomingFilms = (films) => {
     .join('');
 };
 
-const render = () => getFilms().then(renderFilms).then(listUpcomingFilms).then(renderUpcomingFilms);
+const render = () => getFilms().then(renderFilms);// .then(listUpcomingFilms).then(renderUpcomingFilms);
 const clear = () => renderFilms([]);
 
 $myFilms.addEventListener('click', (el) => {

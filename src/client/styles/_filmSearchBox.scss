@@ -2,9 +2,16 @@
   --white: #000;
   --grey-light: #666;
   --blue-light: #1073BA;
+  --image-height: 80px;
+  --image-width: calc( var(--image-height) * 0.75);
+  --card-padding: 3px;
+  --card-width: calc( 200px - var(--card-padding));
+  --card-side-padding: calc( var(--card-padding) / 2 );
 }
 
 .films {
+  display: flex;
+  flex-wrap: wrap;
   max-width: 400px;
   margin: 10px auto;
   padding-inline-start: 0;
@@ -12,23 +19,17 @@
 
 .film {
   list-style: none;
-
-  &-info {
-    padding-left:10px;  
-    text-align: left;
-    min-width: 0;
-    pointer-events: none;
-  }
   
   &-btn-card {
-    height:48px;
-    width: 400px;
+    position: relative;
+    height:var(--image-height);
+    width: var(--card-width);
     border: 1px solid lightgrey;
     border-radius: 2px;
     display:flex;
     align-items: center;
     background-color: #fff;
-    margin-bottom: 2px;
+    margin: 0 var(--card-side-padding) var(--card-padding) var(--card-side-padding);
 
     &:hover {
       background-color: #000;
@@ -36,25 +37,43 @@
       box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 4px 1px;
       cursor: pointer;
       border:1px solid #000;
+
+      .film-add-icon {
+        fill: #ddd;
+        stroke: #ddd;
+      }
     }
+  }
+
+  &-add-icon {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    fill: #333;
+    stroke: #333;
+  }
+
+  &-info {
+    padding: 0 6px;  
+    text-align: left;
+    min-width: 0;
+    pointer-events: none;
+    font-size: 0.7rem;
   }
   
   &-image {
     background-size: cover;
     height:100%;
-    width:32px;
-    min-width: 32px;
+    width:var(--image-width);
+    min-width:var(--image-width);
   }
   
   &-title {
     font-weight: bold;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 0.8rem;
   }
   
   &-year {
-    font-size: 0.9rem;
     font-weight: bold;
     color: #777;
   }

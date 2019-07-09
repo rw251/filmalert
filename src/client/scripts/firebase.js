@@ -126,7 +126,7 @@ const removeFilm = (imdbId) => db
     publish('FILM_REMOVED');
     console.log(imdbId, 'film removed');
   });
-
+  
 const listUpcomingFilms = () => db
   .collection('films')
   .where('year','>','0')

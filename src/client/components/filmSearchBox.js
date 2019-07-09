@@ -22,9 +22,14 @@ const renderFilms = (data) => {
             <div class="film-title">${film.Title}</div>
             <div class="film-year">${film.Year}</div>
           </div>
-          <div class="film-add">
-            Add
-          </div>
+          <svg class="film-add-icon" width="20" height="20" viewbox="0 0 140 140">
+            <rect x="60" y="20" width="20" height="100" />
+            <rect x="20" y="60" width="100" height="20" />
+            <circle cx="70" cy="20" r="10" />
+            <circle cx="70" cy="120" r="10" />
+            <circle cx="20" cy="70" r="10" />
+            <circle cx="120" cy="70" r="10" />
+          </svg>
         </a>
       </li>
     `).join('')}
