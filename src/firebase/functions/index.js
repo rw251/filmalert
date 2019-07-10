@@ -11,7 +11,7 @@ const notify = require('./scripts/notify')(admin, config);
 // Takes an auth code, posts to todoist, and receives an access token
 exports.todoistOauth = functions.https.onRequest(todoist.oauth);
 exports.getFilmsCron = functions.pubsub.schedule('30 */4 * * *').onRun(films.getFilmsCron);
-exports.notificationCron = functions.pubsub.schedule('0 9 * * *').onRun(notify.getFilmsToSend);
+exports.notificationCron = functions.pubsub.schedule('0 1 * * *').onRun(notify.getFilmsToSend);
 
 const incUserCount = (userId) => admin.firestore()
   .collection('counts')

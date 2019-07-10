@@ -8,7 +8,7 @@ $link.addEventListener('click', (e) => {
   e.preventDefault();
   return setTodoistState()
     .then((uuid) => {
-      window.location.href = `https://todoist.com/oauth/authorize?client_id=3349e5205b2e400eb4b93d57b15d4c9a&state=${uuid}&scope=task:add`;
+      window.location.href = `https://todoist.com/oauth/authorize?client_id=3349e5205b2e400eb4b93d57b15d4c9a&state=${uuid}&scope=data:read_write`;
     });
   });
 
