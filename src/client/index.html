@@ -91,8 +91,7 @@
 
     .search-box {
       display: block;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 0 auto 10px;
       width: 300px;
       line-height: 36px;
       border: none;
@@ -156,9 +155,9 @@
   <div>
     <div>
       <input id="lookup" class="search-box" type="text" style="display: none" placeholder="Search for a film..." />
-      <div id="results"></div>
+      <div id="results" style="min-height: 18px"></div>
     </div>
-    <ul id="myFilms" style="list-style-type: none; text-align: left; padding: 0 15px; height: calc(100vh - 108px);margin:0;overflow-y: auto;"></ul>
+    <ul id="myFilms" style="list-style-type: none; text-align: left; padding: 0 15px; height: calc(100vh - 136px);margin:0;overflow-y: auto;"></ul>
     <ul id="upcomingFilms" style="list-style-type: none; text-align: left; padding: 0 15px; max-width: 400px; margin: 0 auto;"></ul>
   </div>
 
