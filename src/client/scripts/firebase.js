@@ -8,7 +8,8 @@ import { uuidv4 } from './utils';
 const $signIn = document.getElementById('signin');
 const $profile = document.getElementById('profile');
 const $userpic = document.getElementById('userpic');
-const $signInButton = document.querySelector('#signin a');
+const $signInWithGoogleButton = document.querySelector('#signin a[data-provider=google]');
+const $signInWithMicrosoftButton = document.querySelector('#signin a[data-provider=microsoft]');
 const $signOutButton = document.querySelector('#signout');
 
 firebase.initializeApp({
@@ -21,18 +22,31 @@ firebase.initializeApp({
   appId: "1:750259488516:web:7d689741fba962be" 
 });
 
-const signIn = (e) => {
+const signInWithMicrosoft = (e) => {
+  e.preventDefault();
+  const provider = new firebase.auth.OAuthProvider('microsoft.com');
+  firebase.auth().signInWithPopup(provider).catch((error) => console.log(error));
+};
+
+const signInWithGoogle = (e) => {
   e.preventDefault();
   const provider = new firebase.auth.GoogleAuthProvider();
   firebase.auth().signInWithPopup(provider).catch((error) => console.log(error));
-}
+};
+
+const signIn = (e) => {
+  e.preventDefault();
+  if(e.target.dataset.provider === 'google') signInWithGoogle();
+  else if(e.target.dataset.provider === 'google') signInWithMicrosoft();
+};
 
 const signOut = (e) => {
   e.preventDefault();
   firebase.auth().signOut();
 };
 
-$signInButton.addEventListener('click', signIn);
+$signInWithGoogleButton.addEventListener('click', signInWithGoogle);
+$signInWithMicrosoftButton.addEventListener('click', signInWithMicrosoft);
 $signOutButton.addEventListener('click', signOut);
 
 const db = firebase.firestore();
@@ -76,11 +90,12 @@ firebase.auth().onAuthStateChanged((user) => {
 
     $userpic.style.backgroundImage = `url(${user.photoURL})`;
     upsertUser(user.displayName || 'unknown', user.email)
-      .then(({ state, isToken }) => {
+      .then((currentUser) => {
         publish('USER_LOGGED_IN');
         
         // redirect from todoist auth
         if(window.location.pathname.indexOf('oauth')>-1){
+          const { state } = currentUser;
           const urlParams = new URLSearchParams(window.location.search);
           const code = urlParams.get('code');
           const paramState = urlParams.get('state');
@@ -96,7 +111,7 @@ firebase.auth().onAuthStateChanged((user) => {
             }
           }
         }
-        return publish(isToken ? 'TODOIST_LINK_FOUND' : 'TODOIST_LINK_NOT_FOUND');
+        return publish(currentUser && currentUser.isToken ? 'TODOIST_LINK_FOUND' : 'TODOIST_LINK_NOT_FOUND');
       });
   } else {
     $signIn.style.display = 'block';

@@ -1,5 +1,8 @@
 var CACHE_NAME = 'film-alert-{{VERSION}}-{{RANDOM}}';
 
+// Never cachs
+var nc = [/microsoft-identity-association/];
+
 // StaleWhileRevalidate
 var swr = [/^http.*polyfill.min.js/, /^http.*rollbar.min.js/];
 
@@ -73,6 +76,15 @@ self.addEventListener('fetch', function(event) {
     return;
   }
 
+  var isNC = nc.reduce(function(hadMatch, nextRegex){
+    return hadMatch || nextRegex.test(requestURL);
+  }, false);
+
+  if(isNC) {
+    NetworkOnly(event);
+    return;
+  }
+
   // same origin
   if((new RegExp('^' + self.origin)).test(requestURL))  CacheWithNetworkFallback(event);
 
@@ -110,4 +122,9 @@ var CacheWithNetworkFallback = function(event){
       return response || fetch(event.request);
     })
   );
+}
+
+var NetworkOnly = function(event) {
+  console.log(event.request.url + ' || network only')
+  event.respondWith(fetch(event.request));
 }

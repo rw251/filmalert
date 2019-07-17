@@ -140,8 +140,12 @@
   <div id="reloadBanner" style="display: none; background-color: black; color: white; font-weight: bold; cursor: pointer; line-height: 32px">New version available - click here to load</div>
   <header>
     <span class="title">Film Alert</span>
-    <div id="signin" style="display: none; text-align: right" >
+    <div id="signin" class="dropdown" style="display: none; text-align: right" >
       <a class="link-btn" href="javascript:void()">Sign in</a>
+      <div class="dropdown-content">
+        <a class="link-btn" data-provider="google" href="javascript:void()">Sign in with Google</a>
+        <a class="link-btn" data-provider="microsoft" href="javascript:void()">Sign in with Microsoft</a>
+      </div>
     </div>
     <div id="profile" class="dropdown" style="display: none; text-align: right" >
       <button id="userpic" class="user-pic"></button>
