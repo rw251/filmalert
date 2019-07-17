@@ -77,7 +77,7 @@
     }
 
     /* Change color of dropdown links on hover */
-    .link-btn:hover {background-color: #ddd;}
+    .link-btn.selectable:hover {background-color: #ddd;}
 
     .user-pic {
       width: 48px;
@@ -113,6 +113,88 @@
       border: solid 1px #444;
       box-shadow: 0 0 5px rgba(81, 203, 238, 1);
     }
+
+    .signin-button {
+      border: none;
+      border-radius: 2px;
+      color: #000;
+      position: relative;
+      height: 36px;
+      margin: 0;
+      min-width: 64px;
+      padding: 0 16px;
+      display: inline-block;
+      font-family: Roboto,Helvetica,Arial,sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      line-height: 1;
+      letter-spacing: 0;
+      overflow: hidden;
+      will-change: box-shadow;
+      transition: box-shadow .2s cubic-bezier(.4,0,1,1),background-color .2s cubic-bezier(.4,0,.2,1),color .2s cubic-bezier(.4,0,.2,1);
+      outline: 0;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      line-height: 36px;
+      vertical-align: middle;
+
+      background: rgba(158,158,158,.2);
+      box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+
+      direction: ltr;
+      font-weight: 500;
+      height: auto;
+      line-height: normal;
+      max-width: 220px;
+      min-height: 40px;
+      padding: 8px 16px;
+      text-align: left;
+      width: 100%;
+    }
+    
+    .signin-button-google {
+      background-color: #fff;
+    }
+    
+    .signin-button-microsoft {
+      background-color: #2F2F2F;
+    }
+
+    .signin-icon-wrapper {
+      display: table-cell;
+      vertical-align: middle;
+    }
+
+    .signin-icon {
+      border: none;
+      display: inline-block;
+      height: 18px;
+      vertical-align: middle;
+      width: 18px;
+    }
+
+    .signin-text {
+      color: #fff;
+      display: table-cell;
+      font-size: 14px;
+      padding-left: 16px;
+      text-transform: none;
+      vertical-align: middle;
+    }
+
+    .signin-button-google>.signin-text {
+      color: #757575;
+    }
+
+    .signin-text-long {
+      display: table-cell;
+    }
+
+    .signin-text-short {
+      display: none;
+    }
   </style>
 
   <script>
@@ -140,22 +222,31 @@
   <div id="reloadBanner" style="display: none; background-color: black; color: white; font-weight: bold; cursor: pointer; line-height: 32px">New version available - click here to load</div>
   <header>
     <span class="title">Film Alert</span>
-    <div id="signin" class="dropdown" style="display: none; text-align: right" >
-      <a class="link-btn" href="javascript:void()">Sign in</a>
-      <div class="dropdown-content">
-        <a class="link-btn" data-provider="google" href="javascript:void()">Sign in with Google</a>
-        <a class="link-btn" data-provider="microsoft" href="javascript:void()">Sign in with Microsoft</a>
-      </div>
-    </div>
     <div id="profile" class="dropdown" style="display: none; text-align: right" >
       <button id="userpic" class="user-pic"></button>
       <div class="dropdown-content">
-        <a id="signout" class="link-btn" href="javascript:void()">Sign out</a>
-        <a id="todoist" style="display: none" class="link-btn" href="javascript:void()">Link to Todoist</a>
-        <a id="todoistUnlink" style="display: none" class="link-btn" href="javascript:void()">Unlink from Todoist</a>
+        <a id="signout" class="link-btn selectable" href="javascript:void()">Sign out</a>
+        <a id="todoist" style="display: none" class="link-btn selectable" href="javascript:void()">Link to Todoist</a>
+        <a id="todoistUnlink" style="display: none" class="link-btn selectable" href="javascript:void()">Unlink from Todoist</a>
       </div>
     <div>
   </header>
+  <div id="signin" class="dropdown" style="display: none;position: absolute;margin: 0 auto;width: 100%;" >
+    <button id="signInGoogle" class="signin-button signin-button-google">
+      <span class="signin-icon-wrapper">
+        <img class="signin-icon" alt src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" />
+      </span>
+      <span class="signin-text signin-text-long">Sign in with Google</span>
+      <span class="signin-text signin-text-short">Google</span>
+    </button>
+    <button id="signInMicrosoft" class="signin-button signin-button-microsoft">
+      <span class="signin-icon-wrapper">
+        <img class="signin-icon" alt src="https://docs.microsoft.com/en-us/azure/active-directory/develop/media/howto-add-branding-in-azure-ad-apps/ms-symbollockup_mssymbol_19.png" />
+      </span>
+      <span class="signin-text signin-text-long">Sign in with Microsoft</span>
+      <span class="signin-text signin-text-short">Microsoft</span>
+    </button>
+  </div>
   <div>
     <div>
       <input id="lookup" class="search-box" type="text" style="display: none" placeholder="Search for a film..." />

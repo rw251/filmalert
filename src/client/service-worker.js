@@ -4,7 +4,12 @@ var CACHE_NAME = 'film-alert-{{VERSION}}-{{RANDOM}}';
 var nc = [/microsoft-identity-association/];
 
 // StaleWhileRevalidate
-var swr = [/^http.*polyfill.min.js/, /^http.*rollbar.min.js/];
+var swr = [
+  /^http.*polyfill.min.js/, 
+  /^http.*rollbar.min.js/, 
+  /^http.*www.gstatic.com.*google.svg/, 
+  /^http.*docs.microsoft.com.*ms-symbollockup_mssymbol_19.png/,
+];
 
 // Precache simple names
 var pc = ['main.css', 'main.js', 'index.html'];

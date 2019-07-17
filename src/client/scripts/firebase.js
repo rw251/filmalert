@@ -8,8 +8,8 @@ import { uuidv4 } from './utils';
 const $signIn = document.getElementById('signin');
 const $profile = document.getElementById('profile');
 const $userpic = document.getElementById('userpic');
-const $signInWithGoogleButton = document.querySelector('#signin a[data-provider=google]');
-const $signInWithMicrosoftButton = document.querySelector('#signin a[data-provider=microsoft]');
+const $signInWithGoogleButton = document.querySelector('#signInGoogle');
+const $signInWithMicrosoftButton = document.querySelector('#signInMicrosoft');
 const $signOutButton = document.querySelector('#signout');
 
 firebase.initializeApp({
@@ -23,10 +23,8 @@ firebase.initializeApp({
 });
 
 
-const signInWith = (provider) => (e) => {
-  e.preventDefault();
-  firebase.auth().signInWithPopup(provider).catch((error) => console.log(error));
-}
+const signInWith = (provider) => () => firebase.auth().signInWithPopup(provider)
+  .catch((error) => console.log(error));
 
 const signInWithGoogle = signInWith(new firebase.auth.GoogleAuthProvider());
 const signInWithMicrosoft = signInWith(new firebase.auth.OAuthProvider('microsoft.com'));
