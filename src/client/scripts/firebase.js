@@ -22,23 +22,14 @@ firebase.initializeApp({
   appId: "1:750259488516:web:7d689741fba962be" 
 });
 
-const signInWithMicrosoft = (e) => {
-  e.preventDefault();
-  const provider = new firebase.auth.OAuthProvider('microsoft.com');
-  firebase.auth().signInWithPopup(provider).catch((error) => console.log(error));
-};
 
-const signInWithGoogle = (e) => {
+const signInWith = (provider) => (e) => {
   e.preventDefault();
-  const provider = new firebase.auth.GoogleAuthProvider();
   firebase.auth().signInWithPopup(provider).catch((error) => console.log(error));
-};
+}
 
-const signIn = (e) => {
-  e.preventDefault();
-  if(e.target.dataset.provider === 'google') signInWithGoogle();
-  else if(e.target.dataset.provider === 'google') signInWithMicrosoft();
-};
+const signInWithGoogle = signInWith(new firebase.auth.GoogleAuthProvider());
+const signInWithMicrosoft = signInWith(new firebase.auth.OAuthProvider('microsoft.com'));
 
 const signOut = (e) => {
   e.preventDefault();
