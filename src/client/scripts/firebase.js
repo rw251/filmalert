@@ -77,7 +77,7 @@ firebase.auth().onAuthStateChanged((user) => {
     $signIn.style.display = 'none';
     $profile.style.display = 'block';
 
-    user.providerData.forEach((pd) => console.log(pd));
+    publish('LINK_UNLINK', user.providerData);
 
     $userpic.style.backgroundImage = `url(${user.photoURL})`;
     upsertUser(user.displayName || 'unknown', user.email)
@@ -145,7 +145,27 @@ const listUpcomingFilms = () => db
     return y;
   });
 
-const linkGoogle = () => firebase
+
+const linkGoogle = () => firebase.auth().currentUser
+  .linkWithPopup(new firebase.auth.GoogleAuthProvider())
+  .then(({user}) => {
+    publish('LINK_UNLINK', user.providerData);
+  });
+const unlinkGoogle = () => firebase.auth().currentUser
+  .unlink('google.com')
+  .then(() => {
+    publish('LINK_UNLINK', firebase.auth().currentUser.providerData);
+  });
+const linkMicrosoft = () => firebase.auth().currentUser
+  .linkWithPopup(new firebase.auth.OAuthProvider('microsoft.com'))
+  .then(({user}) => {
+    publish('LINK_UNLINK', user.providerData);
+  });
+const unlinkMicrosoft = () => firebase.auth().currentUser
+  .unlink('microsoft.com')
+  .then(() => {
+    publish('LINK_UNLINK', firebase.auth().currentUser.providerData);
+  });
 
 export { 
   getFilms, 

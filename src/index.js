@@ -1,11 +1,10 @@
 import './client/styles/main.scss';
 
-import {Workbox} from 'workbox-window';
-
 import './client/components/filmList';
 import './client/components/filmSearchBox';
 import './client/components/reloadBanner';
 import './client/components/todoistAuthLink';
+import './client/components/dropDownMenu';
 
 import { publish } from './client/scripts/pubsub';
 

@@ -1,34 +1,58 @@
-import { setTodoistState } from '../scripts/firebase';
+import { linkGoogle, unlinkGoogle, linkMicrosoft, unlinkMicrosoft } from '../scripts/firebase';
 import { subscribe } from '../scripts/pubsub';
 
-const $link = document.getElementById('todoist');
-const $unlink = document.getElementById('todoistUnlink');
+const $googleLink = document.getElementById('google');
+const $googleUnlink = document.getElementById('googleUnlink');
+const $microsoftLink = document.getElementById('microsoft');
+const $microsoftUnlink = document.getElementById('microsoftUnlink');
 
-$link.addEventListener('click', (e) => {
+$googleLink.addEventListener('click', (e) => {
   e.preventDefault();
-  return setTodoistState()
-    .then((uuid) => {
-      window.location.href = `https://todoist.com/oauth/authorize?client_id=3349e5205b2e400eb4b93d57b15d4c9a&state=${uuid}&scope=data:read_write`;
-    });
-  });
+  return linkGoogle();
+});
 
-$unlink.addEventListener('click', (e) => {
+$googleUnlink.addEventListener('click', (e) => {
   e.preventDefault();
-  // return setTodoistState()
-  //   .then((uuid) => {
-  //     window.location.href = `https://todoist.com/oauth/authorize?client_id=3349e5205b2e400eb4b93d57b15d4c9a&state=${uuid}&scope=task:add`;
-  //   });
-  });
+  return unlinkGoogle();
+});
 
-const showUnlinkButton = () => {
-  $unlink.style.display = 'block';
-  $link.style.display = 'none';
+$microsoftLink.addEventListener('click', (e) => {
+  e.preventDefault();
+  return linkMicrosoft();
+});
+
+$microsoftUnlink.addEventListener('click', (e) => {
+  e.preventDefault();
+  return unlinkMicrosoft();
+});
+
+const showGoogleUnlinkButton = () => {
+  $googleUnlink.style.display = 'block';
+  $googleLink.style.display = 'none';
 };
 
-const showLinkButton = () => {
-  $link.style.display = 'block';
-  $unlink.style.display = 'none';
+const showGoogleLinkButton = () => {
+  $googleLink.style.display = 'block';
+  $googleUnlink.style.display = 'none';
 };
 
-subscribe('TODOIST_LINK_NOT_FOUND', showLinkButton);
-subscribe('TODOIST_LINK_FOUND', showUnlinkButton);
+const showMicrosoftUnlinkButton = () => {
+  $microsoftUnlink.style.display = 'block';
+  $microsoftLink.style.display = 'none';
+};
+
+const showMicrosoftLinkButton = () => {
+  $microsoftLink.style.display = 'block';
+  $microsoftUnlink.style.display = 'none';
+};
+
+subscribe('LINK_UNLINK', (channel, msg) => {
+  if(msg && msg.length === 2) {
+    showGoogleUnlinkButton();
+    showMicrosoftUnlinkButton();
+  } else if (msg && msg.length === 1 && msg[0].providerId === 'google.com') {
+    showMicrosoftLinkButton();
+  } else if (msg && msg.length === 1 && msg[0].providerId === 'microsoft.com') {
+    showGoogleLinkButton();
+  }
+});
