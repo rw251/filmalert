@@ -1,10 +1,8 @@
-import { linkGoogle, unlinkGoogle, linkMicrosoft, unlinkMicrosoft } from '../scripts/firebase';
+import { setTodoistState } from '../scripts/firebase';
 import { subscribe } from '../scripts/pubsub';
 
-const $googleLink = document.getElementById('google');
-const $googleUnlink = document.getElementById('googleUnlink');
-const $microsoftLink = document.getElementById('microsoft');
-const $microsoftUnlink = document.getElementById('microsoftUnlink');
+const $link = document.getElementById('todoist');
+const $unlink = document.getElementById('todoistUnlink');
 
 $link.addEventListener('click', (e) => {
   e.preventDefault();

@@ -120,7 +120,7 @@
       color: #000;
       position: relative;
       height: 36px;
-      margin: 0;
+      margin: 5px 0;
       min-width: 64px;
       padding: 0 16px;
       display: inline-block;
@@ -219,13 +219,17 @@
   </script>  
 </head>
 <body>
-  <div id="reloadBanner" style="display: none; background-color: black; color: white; font-weight: bold; cursor: pointer; line-height: 32px">New version available - click here to load</div>
+  <div id="reloadBanner" style="display: none; background-color: black; color: white; font-weight: bold; cursor: pointer; line-height: 56px">New version available - click here to load</div>
   <header>
     <span class="title">Film Alert</span>
     <div id="profile" class="dropdown" style="display: none; text-align: right" >
       <button id="userpic" class="user-pic"></button>
       <div class="dropdown-content">
         <a id="signout" class="link-btn selectable" href="javascript:void()">Sign out</a>
+        <a id="google" style="display: none" class="link-btn selectable" href="javascript:void()">Link to Google</a>
+        <a id="googleUnlink" style="display: none" class="link-btn selectable" href="javascript:void()">Unlink from Google</a>
+        <a id="microsoft" style="display: none" class="link-btn selectable" href="javascript:void()">Link to Microsoft</a>
+        <a id="microsoftUnlink" style="display: none" class="link-btn selectable" href="javascript:void()">Unlink from Microsoft</a>
         <a id="todoist" style="display: none" class="link-btn selectable" href="javascript:void()">Link to Todoist</a>
         <a id="todoistUnlink" style="display: none" class="link-btn selectable" href="javascript:void()">Unlink from Todoist</a>
       </div>

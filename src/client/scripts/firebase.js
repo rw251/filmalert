@@ -77,6 +77,8 @@ firebase.auth().onAuthStateChanged((user) => {
     $signIn.style.display = 'none';
     $profile.style.display = 'block';
 
+    user.providerData.forEach((pd) => console.log(pd));
+
     $userpic.style.backgroundImage = `url(${user.photoURL})`;
     upsertUser(user.displayName || 'unknown', user.email)
       .then((currentUser) => {
@@ -141,6 +143,18 @@ const listUpcomingFilms = () => db
       return {imdbId: x.id, ...x.data()};
     });
     return y;
-  })
+  });
 
-export { getFilms, addFilmToFirebase, removeFilm, setTodoistState, listUpcomingFilms };
+const linkGoogle = () => firebase
+
+export { 
+  getFilms, 
+  addFilmToFirebase, 
+  removeFilm, 
+  setTodoistState, 
+  listUpcomingFilms,
+  linkGoogle,
+  unlinkGoogle,
+  linkMicrosoft,
+  unlinkMicrosoft,
+};
