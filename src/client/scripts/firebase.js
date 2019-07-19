@@ -152,7 +152,8 @@ const linkGoogle = () => {
     .linkWithPopup(new firebase.auth.GoogleAuthProvider())
     .then(({user}) => {
       publish('LINK_UNLINK', user.providerData);
-    });
+    })
+    .catch(() => publish('HIDE_MESSAGE'));
 }
 const unlinkGoogle = () => {
   publish('SHOW_MESSAGE', 'Unlinking from Google...');
@@ -161,7 +162,8 @@ const unlinkGoogle = () => {
     .then(() => {
       publish('LINK_UNLINK', firebase.auth().currentUser.providerData);
       publish('HIDE_MESSAGE');
-    });
+    })
+    .catch(() => publish('HIDE_MESSAGE'));
 }
 const linkMicrosoft = () => {
   publish('SHOW_MESSAGE', 'Linking to Microsoft...');
@@ -170,7 +172,8 @@ const linkMicrosoft = () => {
     .then(({user}) => {
       publish('LINK_UNLINK', user.providerData);
       publish('HIDE_MESSAGE');
-    });
+    })
+    .catch(() => publish('HIDE_MESSAGE'));
 }
 const unlinkMicrosoft = () => {
   publish('SHOW_MESSAGE', 'Unlinking from Microsoft...');
@@ -179,7 +182,8 @@ const unlinkMicrosoft = () => {
     .then(() => {
       publish('LINK_UNLINK', firebase.auth().currentUser.providerData);
       publish('HIDE_MESSAGE');
-    });
+    })
+    .catch(() => publish('HIDE_MESSAGE'));
 }
 
 export { 
