@@ -54,7 +54,7 @@
       position: absolute;
       text-align: left;
       background-color: #f9f9f9;
-      min-width: 100px;
+      min-width: 220px;
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
       padding: 0;
       z-index: 1;
@@ -195,6 +195,26 @@
     .signin-text-short {
       display: none;
     }
+
+    .pulsate {
+      animation: pulsate 1.5s cubic-bezier(0.65, 0.05, 0.05, 0.99);
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes pulsate{
+      0% { 
+        opacity: 0.75;
+        color: #000;
+      }
+      50% { 
+        opacity: 1.0;
+        color: #050;
+      }
+      100% { 
+        opacity: 0.75;
+        color: #000;
+      }
+    }
   </style>
 
   <script>
@@ -219,7 +239,10 @@
   </script>  
 </head>
 <body>
-  <div id="reloadBanner" style="display: none; background-color: black; color: white; font-weight: bold; cursor: pointer; line-height: 56px">New version available - click here to load</div>
+  <div id="reloadBanner" style="display: none; background-color: black; color: white; font-weight: bold; cursor: pointer; line-height: 56px;position: absolute;width: 100%;z-index: 2;">New version available - click here to load</div>
+  <div id="loaderMessage" class="pulsate" style="display: none; position: absolute; width: 100%; height: 100%; color: #050; background-color: rgba(0,255,255,0.8); z-index: 1; align-items: center;font-size:2rem">
+    Loading...
+  </div>
   <header>
     <span class="title">Film Alert</span>
     <div id="profile" class="dropdown" style="display: none; text-align: right" >

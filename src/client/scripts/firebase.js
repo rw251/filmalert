@@ -146,26 +146,41 @@ const listUpcomingFilms = () => db
   });
 
 
-const linkGoogle = () => firebase.auth().currentUser
-  .linkWithPopup(new firebase.auth.GoogleAuthProvider())
-  .then(({user}) => {
-    publish('LINK_UNLINK', user.providerData);
-  });
-const unlinkGoogle = () => firebase.auth().currentUser
-  .unlink('google.com')
-  .then(() => {
-    publish('LINK_UNLINK', firebase.auth().currentUser.providerData);
-  });
-const linkMicrosoft = () => firebase.auth().currentUser
-  .linkWithPopup(new firebase.auth.OAuthProvider('microsoft.com'))
-  .then(({user}) => {
-    publish('LINK_UNLINK', user.providerData);
-  });
-const unlinkMicrosoft = () => firebase.auth().currentUser
-  .unlink('microsoft.com')
-  .then(() => {
-    publish('LINK_UNLINK', firebase.auth().currentUser.providerData);
-  });
+const linkGoogle = () => {
+  publish('SHOW_MESSAGE', 'Linking to Google...');
+  return firebase.auth().currentUser
+    .linkWithPopup(new firebase.auth.GoogleAuthProvider())
+    .then(({user}) => {
+      publish('LINK_UNLINK', user.providerData);
+    });
+}
+const unlinkGoogle = () => {
+  publish('SHOW_MESSAGE', 'Unlinking from Google...');
+  return firebase.auth().currentUser
+    .unlink('google.com')
+    .then(() => {
+      publish('LINK_UNLINK', firebase.auth().currentUser.providerData);
+      publish('HIDE_MESSAGE');
+    });
+}
+const linkMicrosoft = () => {
+  publish('SHOW_MESSAGE', 'Linking to Microsoft...');
+  return firebase.auth().currentUser
+    .linkWithPopup(new firebase.auth.OAuthProvider('microsoft.com'))
+    .then(({user}) => {
+      publish('LINK_UNLINK', user.providerData);
+      publish('HIDE_MESSAGE');
+    });
+}
+const unlinkMicrosoft = () => {
+  publish('SHOW_MESSAGE', 'Unlinking from Microsoft...');
+  return firebase.auth().currentUser
+    .unlink('microsoft.com')
+    .then(() => {
+      publish('LINK_UNLINK', firebase.auth().currentUser.providerData);
+      publish('HIDE_MESSAGE');
+    });
+}
 
 export { 
   getFilms, 

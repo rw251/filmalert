@@ -5,6 +5,7 @@ import './client/components/filmSearchBox';
 import './client/components/reloadBanner';
 import './client/components/todoistAuthLink';
 import './client/components/dropDownMenu';
+import './client/components/loader';
 
 import { publish } from './client/scripts/pubsub';
 

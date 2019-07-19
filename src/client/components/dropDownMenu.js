@@ -26,30 +26,30 @@ $microsoftUnlink.addEventListener('click', (e) => {
   return unlinkMicrosoft();
 });
 
-const showGoogleUnlinkButton = () => {
-  $googleUnlink.style.display = 'block';
+const showBothUnlinkButtons = () => {
   $googleLink.style.display = 'none';
+  $microsoftLink.style.display = 'none';
+  $googleUnlink.style.display = 'block';
+  $microsoftUnlink.style.display = 'block';
 };
 
 const showGoogleLinkButton = () => {
-  $googleLink.style.display = 'block';
-  $googleUnlink.style.display = 'none';
-};
-
-const showMicrosoftUnlinkButton = () => {
-  $microsoftUnlink.style.display = 'block';
   $microsoftLink.style.display = 'none';
+  $microsoftUnlink.style.display = 'none';
+  $googleUnlink.style.display = 'none';
+  $googleLink.style.display = 'block';
 };
 
 const showMicrosoftLinkButton = () => {
-  $microsoftLink.style.display = 'block';
+  $googleUnlink.style.display = 'none';
+  $googleLink.style.display = 'none';
   $microsoftUnlink.style.display = 'none';
+  $microsoftLink.style.display = 'block';
 };
 
 subscribe('LINK_UNLINK', (channel, msg) => {
   if(msg && msg.length === 2) {
-    showGoogleUnlinkButton();
-    showMicrosoftUnlinkButton();
+    showBothUnlinkButtons();
   } else if (msg && msg.length === 1 && msg[0].providerId === 'google.com') {
     showMicrosoftLinkButton();
   } else if (msg && msg.length === 1 && msg[0].providerId === 'microsoft.com') {
