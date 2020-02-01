@@ -80,6 +80,9 @@ firebase.auth().onAuthStateChanged((user) => {
     publish('LINK_UNLINK', user.providerData);
 
     $userpic.style.backgroundImage = `url(${user.photoURL})`;
+    setTimeout(() => {
+      $userpic.style.transform = 'none';
+    }, 0);
     upsertUser(user.displayName || 'unknown', user.email)
       .then((currentUser) => {
         publish('USER_LOGGED_IN');

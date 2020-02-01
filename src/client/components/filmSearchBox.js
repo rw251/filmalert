@@ -72,12 +72,15 @@ $results.addEventListener('click', addFilm);
 $lookup.addEventListener('keyup', debounce(searchForFilm, 500));
 
 const show = () => {
-  $results.style.display = 'block';
+  // $results.style.display = 'block';
   $lookup.style.display = 'block';
+  setTimeout(() => {
+    $lookup.style.transform = 'none';
+  })
 }
 
 const hide = () => {
-  $results.style.display = 'none';
+  // $results.style.display = 'none';
   $lookup.style.display = 'none';
 }
 

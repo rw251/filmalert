@@ -87,19 +87,26 @@
       border-radius: 24px;
       border:0;
       margin-right:10px;
+      transform: scale(0);
+      transition: transform 0.7s cubic-bezier(0.65, 0.05, 0.8, 1.27);
     }
 
     .search-box {
       display: block;
       margin: 0 auto 10px;
+      padding-left:5px;
       width: 300px;
       line-height: 36px;
       border: none;
       border-radius: 5px;
       border: solid 1px #ccc;
-      text-align: center;
+      /* text-align: center; */
       font-size: 20px;
       outline: none;
+      transform: scale(0);
+      transition: transform 0.7s cubic-bezier(0.65, 0.05, 0.8, 1.27);
+      position: relative;
+      z-index: 1;
     }
 
     .search-box:hover {
@@ -112,6 +119,47 @@
       border-radius: 5px;
       border: solid 1px #444;
       box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    }
+    .search-box::placeholder {
+      transition: opacity 0.5s; 
+    }
+    .search-box:focus::placeholder {
+      opacity: 0;
+    }
+    .search-box-mask {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #00000099;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1.5s;
+    }
+
+    .search-box:focus + .search-box-mask {
+      opacity: 1;
+    }
+
+    
+    #results {
+      min-height: 18px;
+      position: absolute;
+      left: 50%;
+      z-index: 1;
+      margin-left: calc(-1 * var(--card-width));
+      display: none;
+    }
+
+    @media (max-width: 405px){
+      #results {
+        margin-left: calc(-0.5 * var(--card-width));
+      }
+    }
+
+    .search-box:focus ~ #results {
+      display: block;
     }
 
     .signin-button {
@@ -215,6 +263,7 @@
         color: #000;
       }
     }
+
   </style>
 
   <script>
@@ -276,10 +325,11 @@
   </div>
   <div>
     <div>
-      <input id="lookup" class="search-box" type="text" style="display: none" placeholder="Search for a film..." />
-      <div id="results" style="min-height: 18px"></div>
+      <input id="lookup" class="search-box" type="text" placeholder="Search for a film..." />
+      <div class="search-box-mask"></div>
+      <div id="results"></div>
     </div>
-    <ul id="myFilms" style="list-style-type: none; text-align: left; padding: 0 15px; height: calc(100vh - 136px);margin:0;overflow-y: auto;"></ul>
+    <ul id="myFilms" style="list-style-type: none; text-align: left; padding: 0 15px; height: calc(100vh - 136px);margin:0;overflow-y: auto; transform: scaleY(0);transform-origin: top;transition: transform 0.3s ease-in-out 0s;"></ul>
     <ul id="upcomingFilms" style="list-style-type: none; text-align: left; padding: 0 15px; max-width: 400px; margin: 0 auto;"></ul>
   </div>
 

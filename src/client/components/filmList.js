@@ -17,6 +17,7 @@ const renderFilms = (films) => {
       >Remove</button>
     </li>
   `).join('');
+  $myFilms.style.transform = 'none'; 
 };
 
 const renderUpcomingFilms = (films) => {
