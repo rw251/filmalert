@@ -8,7 +8,7 @@ let hideyTimeout;
 
 const renderFilms = (data) => {
   $results.innerHTML = (!data || !data.Search)
-    ? 'No films found - try again'
+    ? '<div class="none-found">No films found - try again</div>'
     : `<ul class="films">
     ${data.Search.map((film) => `
       <li class="film">
@@ -63,6 +63,11 @@ const addFilm = (el) => {
 };
 
 const searchForFilm = (el) => {
+  if(el.target.value === '') {
+    $results.style.display = 'none';
+    return;
+  }
+  $results.style.display = 'block';
   console.log(el.target.value);
   clearTimeout(hideyTimeout);
   findFilm(el.target.value);

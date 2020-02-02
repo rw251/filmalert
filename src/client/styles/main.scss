@@ -16,19 +16,19 @@ body {
 
 @media (max-width: 500px) {
   header {
-    grid-template-columns: 150px 1fr;
-  }
-  .title {
-    grid-column: 1;
+    grid-template-columns: 60px 1fr 60px;
   }
 }
 
 @media (max-width: 400px) {
   header {
-    grid-template-columns: 150px 1fr;
+    grid-template-columns: 150px 1fr 60px;
   }
   .title {
     grid-column: 1;
+  }
+  .dropdown {
+    grid-column: 3;
   }
   .search-box {
     width: calc(100% - 10px);
@@ -64,7 +64,7 @@ body {
 
 html {
   --scrollbarBG: transparent;
-  --thumbBG: #000;
+  --thumbBG: #333;
 }
 #myFilms::-webkit-scrollbar {
   width: 8px;

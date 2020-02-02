@@ -6,7 +6,7 @@ const $upcomingFilms = document.getElementById('upcomingFilms');
 
 const renderFilms = (films) => {
   $myFilms.innerHTML = films.map((film) => `
-    <li style="line-height: 45px; display: grid; grid-template-columns: 1fr 80px; align-items: center;max-width: 400px;margin:0 auto">
+    <li style="line-height: 45px; display: grid; grid-template-columns: 1fr 80px; align-items: center;max-width: 400px;margin:0 auto;transition: transform 2s ease-out">
       <span>${film.title} (${film.year})</span>
       <button
         data-imdb-id="${film.imdbId}" 
@@ -36,7 +36,7 @@ const clear = () => renderFilms([]);
 
 $myFilms.addEventListener('click', (el) => {
   if(el.target.nodeName.toLowerCase() === 'button') {
-    el.target.classList.add('rotate');
+    el.target.parentNode.classList.add('shrink');
     const { imdbId } = el.target.dataset;
     removeFilm(imdbId);
   }

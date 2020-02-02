@@ -36,7 +36,7 @@
 
     header {
       display: grid;
-      grid-template-columns: 180px 1fr 180px;
+      grid-template-columns: 90px 1fr 90px;
     }
 
     #profile:hover button,
@@ -57,7 +57,7 @@
       min-width: 220px;
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
       padding: 0;
-      z-index: 1;
+      z-index: 5;
       right: 0;
     }
 
@@ -119,6 +119,7 @@
       border-radius: 5px;
       border: solid 1px #444;
       box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+      z-index: 20;
     }
     .search-box::placeholder {
       transition: opacity 0.5s; 
@@ -136,6 +137,7 @@
       pointer-events: none;
       opacity: 0;
       transition: opacity 1.5s;
+      z-index: 10;
     }
 
     .search-box:focus + .search-box-mask {
@@ -147,19 +149,36 @@
       min-height: 18px;
       position: absolute;
       left: 50%;
-      z-index: 1;
+      z-index: 20;
       margin-left: calc(-1 * var(--card-width));
-      display: none;
+      /* display: none; */
+    }
+
+    .none-found {
+      width: calc(2 * var(--card-width) - 120px);
+      background: white;
+      line-height: 40px;
+      border-radius: 20px;
+      margin: 0 60px;
     }
 
     @media (max-width: 405px){
       #results {
         margin-left: calc(-0.5 * var(--card-width));
       }
+
+      .none-found {
+        width: calc(var(--card-width) + 20px);
+        margin: 0 -10px;
+      }
     }
 
     .search-box:focus ~ #results {
       display: block;
+    }
+
+    .shrink {
+      transform: scale(0);
     }
 
     .signin-button {
