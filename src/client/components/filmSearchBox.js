@@ -47,10 +47,10 @@ const addFilm = (el) => {
     if(imdbId[0] === 't' && ttImdbId[1] === 't') ttImdbId = imdbId.substr(2);
     addFilmToFirebase(title, year, ttImdbId)
       .then(() => {
-        $results.innerText = `${title} successfully added`;
+        $results.innerHTML = `<div clas="none-found">${title} successfully added</div>`;
       })
       .catch(() => {
-        $results.innerText = `Something went wrong.. sorry. ${title} wasn't added`;
+        $results.innerHTML = `<div clas="none-found">Something went wrong.. sorry. ${title} wasn't added</div>`;
       })
       .then(() => {
         hideyTimeout = setTimeout(() => {
