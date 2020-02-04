@@ -3,4 +3,5 @@ DONE- Show loading when waiting for stuff
 DONE Checkout - undefined (undefined) : undefined on undefined
 DONE Email don't put "upcoming films" in body
 - Mobile friendly
-- keep theme colour in sync with body backgrond color
+DONE- keep theme colour in sync with body backgrond color
+- remove harvester/cron?? don't think i use this anymore
