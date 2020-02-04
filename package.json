@@ -7,7 +7,7 @@
     "start": "npm run serve",
     "build": "rollup -c",
     "build:production": "rollup -c --environment PRODUCTION",
-    "predeploy": "npm version patch && npm run build:production",
+    "predeploy": "npm version patch",
     "deploy": "npm run deploy:client && npm run deploy:firebase",
     "deploy:firebase": "cd src/firebase & firebase deploy --only functions",
     "predeploy:client": "npm run build:production",
