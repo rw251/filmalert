@@ -23,7 +23,7 @@ const rollbarServerToken = process.env.ROLLBAR_SERVER_TOKEN;
 const SOURCE_VERSION = process.env.SOURCE_VERSION || execSync('git rev-parse --short HEAD').toString();
 const USER = execSync('whoami').toString();
 
-const distDir = join('dist', 'public_html'); // TODO
+const distDir = join('dist', 'public_html', 'film'); // TODO
 // Remove ./dist
 rimraf.sync(distDir);
 
