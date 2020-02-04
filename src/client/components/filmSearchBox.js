@@ -68,9 +68,8 @@ const searchForFilm = (el) => {
     return;
   }
   $results.style.display = 'block';
-  console.log(el.target.value);
   clearTimeout(hideyTimeout);
-  findFilm(el.target.value);
+  findFilm(el.target.value); 
 };
 
 $results.addEventListener('click', addFilm);

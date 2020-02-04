@@ -1,4 +1,4 @@
-<FilesMatch "^(service-worker\.js|webpack-manifest\.json)$">
+<FilesMatch "^(service-worker\.js)$">
 FileETag None
 Header unset ETag
 Header set cache-Control "max-age=0, no-cache, no-store, must-revalidate"

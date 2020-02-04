@@ -1,7 +1,6 @@
 node_modules/
 public_html/
 dist/
-dist.1/
 .vscode/
 .env
 
