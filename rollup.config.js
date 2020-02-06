@@ -1,8 +1,6 @@
 import nodeResolve from '@rollup/plugin-node-resolve';
 import copy from 'rollup-plugin-copy';
 import commonjs from '@rollup/plugin-commonjs';
-// import globals from 'rollup-plugin-node-globals';
-// import builtins from 'rollup-plugin-node-builtins';
 import babel from 'rollup-plugin-babel';
 import postcss from 'rollup-plugin-postcss';
 import rimraf from 'rimraf';
