@@ -15,6 +15,24 @@ const swr = [
 let pcb = {{{resourceList}}};
 pcb.push('/'); // add root to cache
 
+// Passed into catch block of a fetch so could access err
+// event if needed. We#re assuming that any error from a 
+// fetch indicates offline.
+var notifyOffline = function() {
+  self.clients.matchAll().then(clients => {
+    clients.forEach(client => client.postMessage({offline:true, online:false}));
+  });
+}
+
+// Passed into then block of a fetch so pass through the
+// result
+var notifyOnline = function(response) {
+  self.clients.matchAll().then(clients => {
+    clients.forEach(client => client.postMessage({online:true, offline:false}));
+  });
+  return response;
+}
+
 self.addEventListener('install', function(event) {
   console.log(`Install event called for ${  CACHE_NAME}`);
   self.skipWaiting();
@@ -82,8 +100,9 @@ var StaleWhileRevalidate = function(event) {
         const fetchPromise = fetch(event.request).then(function(networkResponse) {
           console.log(`${id}|| SWR caching the network response`);
           cache.put(event.request, networkResponse.clone());
+          notifyOnline();
           return networkResponse;
-        })
+        }).catch(notifyOffline);
         console.log(`${id}|| SWR returning response or fetchPromise`);
         return response || fetchPromise;
       })
@@ -97,12 +116,12 @@ var CacheWithNetworkFallback = function(event){
   event.respondWith(
     caches.match(event.request).then(function(response) {
       console.log(`${id}|| CWNF in cache: ${  !!response}`);
-      return response || fetch(event.request);
+      return response || fetch(event.request).then(notifyOnline).catch(notifyOffline);
     })
   );
 }
 
 var NetworkOnly = function(event) {
   console.log(`${event.request.url  } || network only`)
-  event.respondWith(fetch(event.request));
+  event.respondWith(fetch(event.request).then(notifyOnline).catch(notifyOffline));
 }
