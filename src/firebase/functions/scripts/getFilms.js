@@ -101,7 +101,6 @@ const getFilms = (id, date) => rp(request[service](id))
   .then(films => Array.from(films))
   .then(films => films.filter(x => x))
   .then(films => films.forEach((film) => {
-    console.log(film);
     if (!filmObj[film.imdb] || film.time > filmObj[film.imdb].time) {
       filmObj[film.imdb] = film;
     }
