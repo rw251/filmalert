@@ -11,7 +11,7 @@
     "test": "jest --watchAll --bail"
   },
   "engines": {
-    "node": "10"
+    "node": "12"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",

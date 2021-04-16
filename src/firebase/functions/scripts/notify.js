@@ -2,13 +2,30 @@ const sendEmail = require('../utilities/send-email')();
 const addTasksToTodoist = require('../utilities/add-tasks-to-todoist');
 const dateFormatter = require('../utilities/date-formatter');
 
-const constructEmail = (to, films) => ({
+const constructEmail = (to, subject, text, html) => ({
   from: 'Film Alert <film@mg.rw251.com>',
   to,
-  subject: 'Upcoming films',
-  text: `${films.map(x => `${x.title} - ${x.channel} - ${x.time}`).join(', ')}`,
-  html: `<p><ul>${films.map(x => `<li>${x.title} is on ${x.channel} at ${x.time}</li>`).join('')}</ul></p>`,
+  subject,
+  text,
+  html,
 });
+
+const constructFilmEmail = (to, films) => constructEmail(
+  to,
+  'Upcoming films',
+  `${films.map(x => `${x.title} - ${x.channel} - ${x.time}`).join(', ')}`,
+  `<p><ul>${films.map(x => `<li>${x.title} is on ${x.channel} at ${x.time}</li>`).join('')}</ul></p>`,
+);
+
+const sendProblemEmail = async () => {
+  const email = constructEmail(
+    '1234richardwilliams@gmail.com',
+    'Film alert issue',
+    'There dont seem to be any films upcoming in firebase. This means the site is broke.',
+    '<p>There dont seem to be any films upcoming in firebase. This means the site is broke.</p>'
+  );
+  return sendEmail(email);
+}
 
 const timeToSearchFrom = () => {
   const now = new Date();
@@ -30,7 +47,7 @@ const notifyModule = (admin, config) => {
         else filmObj[userId].push({ title, channel, time});
       });
       return filmObj;
-    }, {}));
+    }, {numFiles: snapshot.docs.length}));
 
   const getEmail = (userId) => admin.firestore()
     .collection(config.collections.users)
@@ -42,9 +59,13 @@ const notifyModule = (admin, config) => {
     getFilmsToSend: () => getUpcomingFilms()
       .then(films => {
         console.log(films);
+        if(films.numFiles === 0) {
+          return sendProblemEmail();
+        }
+        delete films.numFiles;
         const emailPromises = Object.keys(films).map((userId) => getEmail(userId)
           .then(({email, todoistToken}) => Promise.all([
-            constructEmail(email, films[userId]),
+            constructFilmEmail(email, films[userId]),
             todoistToken 
               ? addTasksToTodoist({token: todoistToken, films: films[userId]})
               : Promise.resolve(),
