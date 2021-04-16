@@ -4,14 +4,16 @@ const rp = require('request-promise');
 const services = {
   nextfilm: 'nextfilm',
   tvfilms: 'tvfilms',
+  tvfilmapi: 'tvfilmapi',
 };
 
 // Change this to use a different service
-const service = services.tvfilms;
+const service = services.tvfilmapi;
 
 const url = {
   nextfilm: 'https://nextfilm.uk/',
   tvfilms: 'https://www.tv-films.co.uk/',
+  tvfilmapi: 'https://www.tv-films.co.uk/api/shows/',
 };
 
 const request = {
@@ -23,6 +25,10 @@ const request = {
     },
   }),
   tvfilms: () => url.tvfilms,
+  tvfilmapi: () => ({
+    uri: url.tvfilmapi,
+    json:true
+  }),
 };
 
 const filmClass = {
@@ -58,7 +64,24 @@ const validate = {
     film.imdb = film.imdb.slice(2);
     return film;
   },
+  tvfilmapi: (film) => {
+    if (!film.imdb || film.imdb[0] !== 't' || film.imdb[1] !== 't') return false;
+    if (!film.time) return false;
+    film.time = new Date(film.time).toISOString().replace(/[TZ]/g,' ').substr(0,19);
+  
+    // Check the year is a year
+    if(!/^[12][0-9]{3}$/.test(film.year)) film.year = "????";
+  
+    film.imdb = film.imdb.slice(2);
+    return film;
+  }
 };
+
+const isHtml = {
+  nextfilm: true,
+  tvfilms: true,
+  tvfilmapi: false,
+}
 
 const getFilm = {
   nextfilm: (node, date) => {
@@ -95,9 +118,41 @@ const filmObj = {
 
 };
 
+const processHtml = {
+  nextfilm: (html) => {
+    return $(filmClass.nextfilm, html).map((x, y) => getFilm.nextfilm(y, date));
+  },
+  tvfilms: (html) => {
+    return $(filmClass.tvfilms, html).map((x, y) => getFilm.tvfilms(y, date));
+  },
+};
+
+const processJson = {
+  tvfilmapi: (json) => {
+    if(!json || !json.shows || json.shows.length === 0) {
+      // throw error
+    }
+    return json.shows.map((show) => {
+      const film = {
+        channel: show.channel.name,
+        title: json.films[show.film_id].title,
+        year: json.films[show.film_id].year,
+        time: show.time,
+        imdb: json.films[show.film_id].imdb,
+      };
+      return validate.tvfilmapi(film);
+    });
+  },
+};
+
 const getFilms = (id, date) => rp(request[service](id))
-  .then(html => $(filmClass[service], html))
-  .then(data => data.map((x, y) => getFilm[service](y, date)))
+  .then(htmlOrJSON => {
+    if(isHtml[service]) {
+      return processHtml[service](htmlOrJSON);
+    } else {
+      return processJson[service](htmlOrJSON)
+    }
+  })
   .then(films => Array.from(films))
   .then(films => films.filter(x => x))
   .then(films => films.forEach((film) => {
@@ -175,6 +230,10 @@ const filmModule = (admin, config) => {
 
 module.exports = filmModule;
 
+// const now = new Date();
+// const nowISO = now.toISOString();
+// const nowAsShortDate = now.toISOString().substr(0, 10);
+// getFilms(0, nowAsShortDate);
 // tidyFilms(nowISO)
 //   .then(() => Promise.all([
 //     getFilms(0, nowAsShortDate),
