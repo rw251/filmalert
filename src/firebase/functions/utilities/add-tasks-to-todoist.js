@@ -9,7 +9,7 @@ module.exports = ({token, films}) => {
       uuid: uuidv4(),
       args: {
         content: 'Record or delete ' + film.title+'. It\'s on ' + film.channel + ' at ' + film.time,
-        priority: 4,
+        priority: 2,
         date_string: 'today',
       }
     }
