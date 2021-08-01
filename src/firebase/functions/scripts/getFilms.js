@@ -17,7 +17,7 @@ const url = {
 };
 
 const request = {
-  nextfilm: (id) =>({
+  nextfilm: (id) => ({
     uri: `${url.nextfilm}?id=${id}`,
     headers: {
       'User-Agent': 'Request-Promise',
@@ -27,7 +27,7 @@ const request = {
   tvfilms: () => url.tvfilms,
   tvfilmapi: () => ({
     uri: url.tvfilmapi,
-    json:true
+    json: true
   }),
 };
 
@@ -41,37 +41,37 @@ const validate = {
     if (!film.imdb || film.imdb[0] !== 't' || film.imdb[1] !== 't') return false;
     if (!film.time || film.time.indexOf('-') < 0) return false;
     film.time = `${date} ${film.time.split('-')[0].replace(/ /g, '')}:00`;
-  
+
     // Check it's still today
     const actualDateInMS = (new Date(date)).getTime();
     const actualTimeInMS = (new Date(film.time)).getTime();
-    if(Math.abs(actualDateInMS - actualTimeInMS) > 48*60*60*1000) return false;
-  
+    if (Math.abs(actualDateInMS - actualTimeInMS) > 48 * 60 * 60 * 1000) return false;
+
     // Check the year is a year
-    if(!/^[12][0-9]{3}$/.test(film.year)) film.year = "????";
-  
+    if (!/^[12][0-9]{3}$/.test(film.year)) film.year = "????";
+
     film.imdb = film.imdb.slice(2);
     return film;
   },
   tvfilms: (film) => {
     if (!film.imdb || film.imdb[0] !== 't' || film.imdb[1] !== 't') return false;
     if (!film.time) return false;
-    film.time = new Date(film.time).toISOString().replace(/[TZ]/g,' ').substr(0,19);
-  
+    film.time = new Date(film.time).toISOString().replace(/[TZ]/g, ' ').substr(0, 19);
+
     // Check the year is a year
-    if(!/^[12][0-9]{3}$/.test(film.year)) film.year = "????";
-  
+    if (!/^[12][0-9]{3}$/.test(film.year)) film.year = "????";
+
     film.imdb = film.imdb.slice(2);
     return film;
   },
   tvfilmapi: (film) => {
     if (!film.imdb || film.imdb[0] !== 't' || film.imdb[1] !== 't') return false;
     if (!film.time) return false;
-    film.time = new Date(film.time).toISOString().replace(/[TZ]/g,' ').substr(0,19);
-  
+    film.time = new Date(film.time).toISOString().replace(/[TZ]/g, ' ').substr(0, 19);
+
     // Check the year is a year
-    if(!/^[12][0-9]{3}$/.test(film.year)) film.year = "????";
-  
+    if (!/^[12][0-9]{3}$/.test(film.year)) film.year = "????";
+
     film.imdb = film.imdb.slice(2);
     return film;
   }
@@ -129,12 +129,12 @@ const processHtml = {
 
 const processJson = {
   tvfilmapi: (json) => {
-    if(!json || !json.shows || json.shows.length === 0) {
+    if (!json || !json.shows || json.shows.length === 0) {
       // throw error
     }
     return json.shows.map((show) => {
       const film = {
-        channel: show.channel.name,
+        channel: show.channel ? show.channel.name : show.link, // now includes iplayer shows
         title: json.films[show.film_id].title,
         year: json.films[show.film_id].year,
         time: show.time,
@@ -147,7 +147,7 @@ const processJson = {
 
 const getFilms = (id, date) => rp(request[service](id))
   .then(htmlOrJSON => {
-    if(isHtml[service]) {
+    if (isHtml[service]) {
       return processHtml[service](htmlOrJSON);
     } else {
       return processJson[service](htmlOrJSON)
@@ -164,7 +164,7 @@ const getFilms = (id, date) => rp(request[service](id))
 const timeToRemoveFrom = () => {
   const now = new Date();
   now.setHours(now.getHours() - 4);
-  return now.toISOString().split("T").reduce((date, time) => date + ' ' + time.substr(0,5))
+  return now.toISOString().split("T").reduce((date, time) => date + ' ' + time.substr(0, 5))
 }
 
 const filmModule = (admin, config) => {
@@ -180,7 +180,7 @@ const filmModule = (admin, config) => {
       .get()
       .then((snapshot) => {
         snapshot.docs.forEach(doc => {
-          if(!doc.data().users || Object.keys(doc.data().users).length === 0)
+          if (!doc.data().users || Object.keys(doc.data().users).length === 0)
             batch.delete(doc.ref);
         });
         return batch.commit();
@@ -189,7 +189,7 @@ const filmModule = (admin, config) => {
 
 
   const insertNewFilms = (films) => {
-    let batch = admin.firestore().batch();    
+    let batch = admin.firestore().batch();
     films.forEach(x => {
       let newFilm = admin.firestore().collection(config.collections.films).doc(x.imdb);
       batch.set(newFilm, x, { merge: true });
@@ -199,7 +199,7 @@ const filmModule = (admin, config) => {
   };
 
   return {
-    
+
     getFilmsCron: (context) => {
 
       const now = new Date();
