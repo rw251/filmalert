@@ -1,6 +1,6 @@
 {
   "name": "filmalert",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "license": "ISC",
   "scripts": {
     "watch": "rollup -c -w",
