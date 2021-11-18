@@ -212,9 +212,9 @@ const filmModule = (admin, config) => {
     batchIndex = 1;
     for (const batch of batchArray) {
       console.log(`Batch ${batchIndex} starting...`);
-      batchIndex++;
       await batch.commit();
       console.log(`Batch ${batchIndex} complete.`);
+      batchIndex++;
     }
     return;
   };
