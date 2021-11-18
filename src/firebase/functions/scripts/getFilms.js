@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 const $ = require('cheerio');
 const rp = require('request-promise');
 
@@ -188,14 +189,34 @@ const filmModule = (admin, config) => {
   }
 
 
-  const insertNewFilms = (films) => {
-    let batch = admin.firestore().batch();
+  const insertNewFilms = async (films) => {
+
+    const batchArray = [];
+    batchArray.push(admin.firestore().batch());
+    let operationCounter = 0;
+    let batchIndex = 0;
+
+    // let batch = admin.firestore().batch();
     films.forEach(x => {
       let newFilm = admin.firestore().collection(config.collections.films).doc(x.imdb);
-      batch.set(newFilm, x, { merge: true });
+      batchArray[batchIndex].set(newFilm, x, { merge: true });
+      operationCounter++;
+
+      if (operationCounter === 499) {
+        batchArray.push(admin.firestore().batch());
+        batchIndex++;
+        operationCounter = 0;
+      }
     });
-    console.log(`${films.length} films inserting...`);
-    return batch.commit();
+    console.log(`${films.length} films inserting in ${batchArray.length} batch${batchArray.length!==1 ? 'es':''}...`);
+    batchIndex = 1;
+    for (const batch of batchArray) {
+      console.log(`Batch ${batchIndex} starting...`);
+      batchIndex++;
+      await batch.commit();
+      console.log(`Batch ${batchIndex} complete.`);
+    }
+    return;
   };
 
   return {

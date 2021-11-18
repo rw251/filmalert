@@ -1,6 +1,5 @@
-const rp = require('request-promise');
-const DB = require('./db');
 const mg = require('mailgun-js');
+const DB = require('./db');
 
 const { mailPassword } = process.env;
 const mailgun = mg({apiKey: mailPassword, domain: 'mg.rw251.com'});
