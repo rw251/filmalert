@@ -133,9 +133,13 @@ const processJson = {
     if (!json || !json.shows || json.shows.length === 0) {
       // throw error
     }
+    const channels = {};
+    json.channels.forEach((channel) => {
+      channels[channel.id] = channel.name;
+    });
     return json.shows.map((show) => {
       const film = {
-        channel: show.channel ? show.channel.name : show.link, // now includes iplayer shows
+        channel: show.channel_id ? channels[show.channel_id] : show.link, // now includes iplayer shows
         title: json.films[show.film_id].title,
         year: json.films[show.film_id].year,
         time: show.time,
