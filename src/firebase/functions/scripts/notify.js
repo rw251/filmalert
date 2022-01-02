@@ -35,17 +35,27 @@ const timeToSearchFrom = () => {
 
 const notifyModule = (admin, config) => {
 
-  const getUpcomingFilms = () => admin.firestore()
+  const getAvailableChannels = () => admin.firestore()
+    .collection(config.collections.channels)
+    .get()
+    .then(snapshot => snapshot.docs.map(x => {
+      const { name } = x.data();
+      return name;
+    }));
+
+  const getUpcomingFilms = (channels) => admin.firestore()
     .collection(config.collections.films)
     .where("time", ">", timeToSearchFrom())
     .get()
     .then((snapshot) => snapshot.docs.reduce((filmObj, film) => {
       const { users, channel, time, title} = film.data();
       if(!users || Object.keys(users).length === 0) return filmObj;
-      Object.keys(users).forEach((userId) => {
-        if(!filmObj[userId]) filmObj[userId] = [ { title, channel, time}];
-        else filmObj[userId].push({ title, channel, time});
-      });
+      if(channel.toLowerCase().match(/bbc/) || channels.filter(x => x.toLowerCase().replace(/ /g,"")===channel.toLowerCase().replace(/ /g,"")).length > 0) {
+        Object.keys(users).forEach((userId) => {
+          if(!filmObj[userId]) filmObj[userId] = [ { title, channel, time}];
+          else filmObj[userId].push({ title, channel, time});
+        });
+      }
       return filmObj;
     }, {numFiles: snapshot.docs.length}));
 
@@ -56,7 +66,8 @@ const notifyModule = (admin, config) => {
     .then((user) => user.data());
 
   return { 
-    getFilmsToSend: () => getUpcomingFilms()
+    getFilmsToSend: () => getAvailableChannels()
+      .then(getUpcomingFilms)
       .then(films => {
         console.log(films);
         if(films.numFiles === 0) {
