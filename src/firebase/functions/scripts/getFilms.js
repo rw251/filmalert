@@ -14,7 +14,7 @@ const service = services.tvfilmapi;
 const url = {
   nextfilm: 'https://nextfilm.uk/',
   tvfilms: 'https://www.tv-films.co.uk/',
-  tvfilmapi: 'https://www.tv-films.co.uk/api/shows/',
+  tvfilmapi: 'https://www.tv-films.co.uk/api/shows2/',
 };
 
 const request = {
