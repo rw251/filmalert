@@ -14,7 +14,7 @@ const service = services.tvfilmapi;
 const url = {
   nextfilm: 'https://nextfilm.uk/',
   tvfilms: 'https://www.tv-films.co.uk/',
-  tvfilmapi: 'https://www.tv-films.co.uk/api/shows2/',
+  tvfilmapi: ['https://www.tv-films.co.uk/api/shows/','https://www.tv-films.co.uk/api/shows2/'],
 };
 
 const request = {
@@ -26,10 +26,10 @@ const request = {
     },
   }),
   tvfilms: () => url.tvfilms,
-  tvfilmapi: () => ({
-    uri: url.tvfilmapi,
-    json: true
-  }),
+  tvfilmapi: (id, backup) => (backup
+    ? { uri: url.tvfilmapi[1], json: true }
+    : { uri: url.tvfilmapi[0], json: true }
+  ),
 };
 
 const filmClass = {
@@ -151,6 +151,10 @@ const processJson = {
 };
 
 const getFilms = (id, date) => rp(request[service](id))
+  .catch(() => {
+    // Try the backup url
+    return rp(request[service](id, true));
+  })
   .then(htmlOrJSON => {
     if (isHtml[service]) {
       return processHtml[service](htmlOrJSON);
@@ -258,7 +262,7 @@ module.exports = filmModule;
 // const now = new Date();
 // const nowISO = now.toISOString();
 // const nowAsShortDate = now.toISOString().substr(0, 10);
-// getFilms(0, nowAsShortDate);
+// getFilms(0, nowAsShortDate).then(()=>console.log('all done'));
 // tidyFilms(nowISO)
 //   .then(() => Promise.all([
 //     getFilms(0, nowAsShortDate),
