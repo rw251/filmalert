@@ -11,12 +11,12 @@
     "test": "jest --watchAll --bail"
   },
   "engines": {
-    "node": "10"
+    "node": "18"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
-    "firebase-admin": "^8.0.0",
-    "firebase-functions": "^3.0.0",
+    "firebase-admin": "^11.9.0",
+    "firebase-functions": "^4.4.0",
     "mailgun-js": "^0.22.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
