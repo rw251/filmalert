@@ -1,0 +1,6 @@
+# If you are only using Pages + D1, you only need the below in your wrangler.toml to interact with D1 locally.
+[[d1_databases]]
+binding = "FILM_DB" # Should match preview_database_id
+database_name = "film"
+database_id = "xxxfff" # wrangler d1 info YOUR_DATABASE_NAME
+preview_database_id = "FILM_DB" # Required for Pages local development
