@@ -3,52 +3,31 @@
   "version": "1.0.16",
   "license": "ISC",
   "scripts": {
-    "watch": "rollup -c -w",
-    "start": "npm run serve",
-    "build": "rollup -c",
-    "build:production": "rollup -c --environment PRODUCTION",
-    "predeploy": "npm version patch",
-    "deploy": "npm run deploy:client && npm run deploy:firebase",
-    "deploy:firebase": "cd src/firebase & firebase deploy --only functions",
-    "predeploy:client": "npm run build:production",
-    "deploy:client": "rsync -az --force --delete --progress -e 'ssh' ./dist/public_html/film/ rw251.com:~/public_html/film --exclude=/.ssh --exclude=/.logs --exclude=/.cagefs --exclude=/.cl.selector --exclude=/.bash_history",
-    "deploy:cron": "rsync -az --force --delete --progress -e 'ssh' ./harvester/film/ rw251.com:~/cron/film --exclude=/.ssh --exclude=/.env --exclude=/.logs --exclude=/.cagefs --exclude=/.cl.selector --exclude=/.bash_history --exclude=/node_modules --chmod=Fu=rwx,Fog=rwx",
-    "postdeploy": "git push --follow-tags",
-    "serve": "concurrently -kill-others-on-fail \"npm run watch\" \"http-server ./dist/public_html/film -p 9448 -a localhost -c-1 -o\"",
-    "test": "cd src/firebase/functions & npm test"
+    "build:dev": "rollup -c",
+    "build:production": "rollup -c --environment BUILD:production",
+    "dev": "npx wrangler pages dev public/ --compatibility-flags=\"nodejs_compat\" --ip=0.0.0.0",
+    "justdev": "npx wrangler pages dev public/ --compatibility-flags=\"nodejs_compat\" --ip=0.0.0.0",
+    "predev": "npm run build:dev",
+    "db:init": "npx wrangler d1 execute film --local --file \"./db/_schema.sql\"",
+    "db:channels": "npx wrangler d1 execute film --local --command \"SELECT * FROM channels\""
   },
   "keywords": [],
   "author": "Richard Williams <1234richardwilliams@gmail.com> (https://rw251.github.io)",
-  "browserslist": [
-    "ie 11"
-  ],
   "devDependencies": {
-    "@babel/core": "^7.2.2",
-    "@babel/preset-env": "^7.3.1",
-    "@rollup/plugin-commonjs": "^11.0.2",
-    "@rollup/plugin-node-resolve": "^7.1.1",
-    "autoprefixer": "^9.5.0",
-    "concurrently": "^4.1.2",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
     "dotenv": "^8.2.0",
-    "eslint": "^5.12.1",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-config-prettier": "^4.1.0",
-    "eslint-plugin-import": "^2.15.0",
-    "firebase-tools": "^12.3.0",
-    "http-server": "^0.12.1",
     "mustache": "^4.0.0",
-    "node-sass": "^4.14.1",
     "rimraf": "^3.0.1",
-    "rollup": "^1.31.0",
-    "rollup-plugin-babel": "^4.3.3",
-    "rollup-plugin-copy": "^3.3.0",
-    "rollup-plugin-postcss": "^2.0.6",
+    "rollup": "^4.3.0",
+    "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-rollbar-deploy": "^1.1.2",
-    "rollup-plugin-rollbar-sourcemaps": "^1.1.0",
-    "rollup-plugin-terser": "^5.2.0"
+    "rollup-plugin-rollbar-sourcemaps": "^2.0.1"
   },
   "dependencies": {
-    "acorn": "^6.4.1",
-    "firebase": "^6.2.0"
+    "cookie": "^0.5.0"
   }
 }

@@ -1,8 +1,11 @@
 node_modules/
 public_html/
 dist/
+public/
 .vscode/
 .env
+.dev.vars
+.wrangler/
 
 npm-debug.log
 config.php
