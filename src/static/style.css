@@ -315,14 +315,14 @@ header {
         fill: #ddd;
         stroke: #ddd;
       }
-film-add-icon {
+.film-add-icon {
     position: absolute;
     right: 2px;
     bottom: 2px;
     fill: #333;
     stroke: #333;
   }
-film-info {
+.film-info {
     padding: 0 6px;  
     text-align: left;
     min-width: 0;
@@ -330,24 +330,24 @@ film-info {
     font-size: 0.7rem;
   }
   
-  film-image {
+.film-image {
     background-size: cover;
     height:100%;
     width:var(--image-width);
     min-width:var(--image-width);
   }
   
-  film-title {
+  .film-title {
     font-weight: bold;
     font-size: 0.8rem;
   }
   
-  film-year {
+  .film-year {
     font-weight: bold;
     color: #777;
   }
   
-  film-add {
+  .film-add {
     flex-grow: 1;
     text-align: right;
     align-self: flex-end;

@@ -14,7 +14,7 @@ const renderFilms = (data) => {
     ${data.Search.map(
       (film) => `
       <li class="film">
-        <a class="film-btn-card" data-imdb="${film.imdb}" 
+        <a class="film-btn-card" data-imdb="${film.imdbID}" 
           data-title="${film.Title}" data-year="${film.Year}">
           <div class="film-image" style="${
             film.Poster.indexOf('http') > -1
