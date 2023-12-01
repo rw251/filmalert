@@ -8,9 +8,6 @@ const $userpic = document.getElementById('userpic');
 var CLIENT_ID = document
   .querySelector('meta[name=google-signin-client_id]')
   .getAttribute('content');
-var API_KEY = document
-  .querySelector('meta[name=google-drive-api-key]')
-  .getAttribute('content');
 
 // Array of API discovery doc URLs for APIs used by the quickstart
 // var DISCOVERY_DOCS = [
@@ -38,8 +35,7 @@ var API_KEY = document
 
 // Authorization scopes required by the API; multiple scopes can be
 // included, separated by spaces.
-var SCOPES =
-  'https://www.googleapis.com/auth/drive.appdata openid email profile';
+var SCOPES = 'openid email profile';
 
 var access_token;
 var todoist_state;
@@ -82,9 +78,7 @@ window.handleGapiLoaded = () => {
  *  listeners.
  */
 async function initClient() {
-  await gapi.client.init({
-    apiKey: API_KEY,
-  });
+  await gapi.client.init({});
 
   gapi.client.setToken({ access_token });
 

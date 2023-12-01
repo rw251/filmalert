@@ -38,7 +38,6 @@ const buildConfig = () => {
   const isDev = process.env.BUILD !== 'production';
 
   const clientId = process.env.CLIENT_ID;
-  const apiKey = isDev ? process.env.API_KEY_DEV : process.env.API_KEY_PROD;
 
   return {
     input: {
@@ -62,7 +61,7 @@ const buildConfig = () => {
       commonjs(), // allows import to work with commonjs modules that do a module.exports
       babel({ exclude: 'node_modules/**', babelHelpers: 'bundled' }),
       !isDev && terser(), // uglify the code if not dev mode
-      createHTMLPlugin({ isDev, rollbarClientToken, clientId, apiKey }), // create the index.html
+      createHTMLPlugin({ isDev, rollbarClientToken, clientId }), // create the index.html
       copy({
         targets: [{ src: './src/static/**/*', dest: distDir, dot: true }],
       }),
