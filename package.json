@@ -21,6 +21,7 @@
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",
     "dotenv": "^8.2.0",
+    "inquirer": "^9.2.12",
     "mustache": "^4.0.0",
     "rimraf": "^3.0.1",
     "rollup": "^4.3.0",
