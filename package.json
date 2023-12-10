@@ -1,6 +1,6 @@
 {
   "name": "filmalert",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "license": "ISC",
   "scripts": {
     "build:dev": "rollup -c",
