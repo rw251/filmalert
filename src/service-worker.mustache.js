@@ -5,7 +5,6 @@ const nc = [/microsoft-identity-association/];
 
 // StaleWhileRevalidate
 const swr = [
-  /^http.*polyfill.min.js/, 
   /^http.*rollbar.min.js/, 
   /^http.*www.gstatic.com.*google.svg/, 
   /^http.*docs.microsoft.com.*ms-symbollockup_mssymbol_19.png/,
