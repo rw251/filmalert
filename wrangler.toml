@@ -1,3 +1,5 @@
+compatibility_date = "2026-05-07"
+
 # If you are only using Pages + D1, you only need the below in your wrangler.toml to interact with D1 locally.
 [[d1_databases]]
 binding = "FILM_DB" # Should match preview_database_id

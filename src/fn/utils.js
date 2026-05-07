@@ -1,22 +1,22 @@
-import { parse } from 'cookie';
-import crypto from 'node:crypto';
+import { parse } from "cookie";
+import crypto from "node:crypto";
 
-const COOKIE = 'filmmember';
+const COOKIE = "filmmember";
 
 function getSessionIdFromCookie() {
-  const cookie = parse(context.request.headers.get('Cookie') || '');
+  const cookie = parse(context.request.headers.get("Cookie") || "");
   return cookie[COOKIE];
 }
 
 function generateKey() {
-  return crypto.randomBytes(16).toString('base64');
+  return crypto.randomBytes(16).toString("base64");
 }
 
 async function jsonResponse(json, removeCookie) {
   const resp = new Response(JSON.stringify(json), {
     headers: {
-      'content-type': 'application/json;charset=UTF-8',
-      'Set-Cookie': setCookie(removeCookie),
+      "content-type": "application/json;charset=UTF-8",
+      "Set-Cookie": setCookie(removeCookie),
     },
   });
   return resp;
@@ -55,20 +55,21 @@ function getParam(name) {
 }
 
 async function getUserFromSessionId() {
-  const dbResp = await context.env.FILM_DB.prepare(
-    'SELECT * FROM users WHERE session_id = ?'
-  )
-    .bind(sessionId)
-    .first();
-  const {
-    user_id,
-    email,
-    name,
-    refresh_token,
-    expiry,
-    todoistState,
-    todoistToken,
-  } = dbResp || {};
+  let dbResp;
+  try {
+    dbResp = await context.env.FILM_DB.prepare("SELECT * FROM users WHERE session_id = ?")
+      .bind(sessionId)
+      .first();
+  } catch (err) {
+    // Local dev can start before D1 schema is initialized.
+    // Fall back to unauthenticated flow rather than returning 500 from /token.
+    if (`${err}`.includes("no such table")) {
+      console.warn("D1 schema not initialized (missing table). Run: npm run db:init");
+      return false;
+    }
+    throw err;
+  }
+  const { user_id, email, name, refresh_token, expiry, todoistState, todoistToken } = dbResp || {};
   if (refresh_token) {
     session.userId = user_id;
     session.email = email;
@@ -88,13 +89,13 @@ async function refreshAccessToken(refresh_token) {
     client_id: context.env.CLIENT_ID,
     client_secret: context.env.CLIENT_SECRET,
     refresh_token,
-    grant_type: 'refresh_token',
+    grant_type: "refresh_token",
   };
-  const obj = await fetch('https://oauth2.googleapis.com/token', {
-    method: 'POST',
+  const obj = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
     headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+      Accept: "application/json",
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
   }).then((x) => x.json());
@@ -108,7 +109,7 @@ async function refreshAccessToken(refresh_token) {
 
 async function getUserInfoFromCode(code) {
   //The url you wish to send the POST request to
-  const url = 'https://oauth2.googleapis.com/token';
+  const url = "https://oauth2.googleapis.com/token";
 
   const { protocol, host } = new URL(context.request.url);
 
@@ -117,29 +118,29 @@ async function getUserInfoFromCode(code) {
     client_id: context.env.CLIENT_ID,
     client_secret: context.env.CLIENT_SECRET,
     code: code,
-    grant_type: 'authorization_code',
+    grant_type: "authorization_code",
     redirect_uri: `${protocol}//${host}/key`,
   };
 
   const obj = await fetch(url, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+      Accept: "application/json",
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
   }).then((x) => x.json());
 
-  const jwt = obj.id_token.split('.');
+  const jwt = obj.id_token.split(".");
   const userinfo = JSON.parse(atob(jwt[1]), true);
 
   console.log(atob(jwt[1]));
 
-  const userId = userinfo['sub'];
-  const email = userinfo['email'];
-  const name = userinfo['name'];
+  const userId = userinfo["sub"];
+  const email = userinfo["email"];
+  const name = userinfo["name"];
   const accessToken = obj.access_token;
-  const refreshToken = obj.refresh_token || '';
+  const refreshToken = obj.refresh_token || "";
 
   session.access_token = accessToken;
   session.name = name;
@@ -148,7 +149,7 @@ async function getUserInfoFromCode(code) {
   session.refresh_token = refreshToken;
 
   const resp = await context.env.FILM_DB.prepare(
-    'SELECT session_id, expiry FROM users WHERE user_id = ?'
+    "SELECT session_id, expiry FROM users WHERE user_id = ?",
   )
     .bind(userId)
     .first();
@@ -189,7 +190,7 @@ async function updateUser() {
       session.email || null,
       session.name || null,
       sessionId,
-      session.expiry || null
+      session.expiry || null,
     )
     .run();
   return info.success;
@@ -199,8 +200,8 @@ async function redirectHomeResponse() {
   const resp = new Response(null, {
     status: 302,
     headers: {
-      Location: '/',
-      'Set-Cookie': setCookie(),
+      Location: "/",
+      "Set-Cookie": setCookie(),
     },
   });
   return resp;
