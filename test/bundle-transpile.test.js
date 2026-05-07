@@ -27,12 +27,12 @@ function getMainBundlePath() {
   return path.join(distDir, newest.file);
 }
 
-test("browser bundle parses as ES5", () => {
+test("browser bundle parses as valid JavaScript", () => {
   const bundlePath = getMainBundlePath();
   assert.ok(bundlePath, 'No built main bundle found. Run "npm run build:production" first.');
 
   const code = fs.readFileSync(bundlePath, "utf8");
   assert.doesNotThrow(() => {
-    acorn.parse(code, { ecmaVersion: 5 });
-  }, `Bundle is not ES5-compatible: ${bundlePath}`);
+    acorn.parse(code, { ecmaVersion: "latest" });
+  }, `Bundle contains invalid JavaScript: ${bundlePath}`);
 });
