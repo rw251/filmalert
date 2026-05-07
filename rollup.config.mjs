@@ -35,6 +35,17 @@ const buildConfig = () => {
   const isDev = process.env.BUILD !== "production";
 
   const clientId = process.env.CLIENT_ID;
+  const clientSecret = process.env.CLIENT_SECRET;
+
+  // Error and stop the build if any of the required environment variables are missing
+  if (isDev && (!clientId || !clientSecret)) {
+    const missing = [];
+    if (!clientId) missing.push("CLIENT_ID");
+    if (!clientSecret) missing.push("CLIENT_SECRET");
+    throw new Error(
+      `Missing required environment variable(s) for development build: ${missing.join(", ")}. Please create a .dev.vars file with these variables.`,
+    );
+  }
 
   return {
     input: {
