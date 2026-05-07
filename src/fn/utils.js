@@ -131,16 +131,38 @@ async function getUserInfoFromCode(code) {
     body: JSON.stringify(body),
   }).then((x) => x.json());
 
-  const jwt = obj.id_token.split(".");
-  const userinfo = JSON.parse(atob(jwt[1]), true);
+  if (!obj || !obj.id_token || !obj.access_token) {
+    console.warn("OAuth token exchange failed", {
+      error: obj && obj.error,
+      error_description: obj && obj.error_description,
+    });
+    return false;
+  }
 
-  console.log(atob(jwt[1]));
+  const jwt = obj.id_token.split(".");
+  if (jwt.length < 2) {
+    console.warn("OAuth id_token had unexpected format");
+    return false;
+  }
+
+  let userinfo;
+  try {
+    userinfo = JSON.parse(atob(jwt[1]), true);
+  } catch (err) {
+    console.warn("OAuth id_token payload could not be parsed", err);
+    return false;
+  }
 
   const userId = userinfo["sub"];
   const email = userinfo["email"];
   const name = userinfo["name"];
   const accessToken = obj.access_token;
   const refreshToken = obj.refresh_token || "";
+
+  if (!userId) {
+    console.warn("OAuth id_token did not include user sub");
+    return false;
+  }
 
   session.access_token = accessToken;
   session.name = name;
