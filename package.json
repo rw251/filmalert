@@ -5,6 +5,8 @@
   "scripts": {
     "build:dev": "rollup -c",
     "build:production": "rollup -c --environment BUILD:production",
+    "test": "npm run build:production && npm run test:bundle",
+    "test:bundle": "node --test test/bundle-transpile.test.js",
     "deploy": "node deploy.mjs",
     "dev": "npx wrangler pages dev public/ --compatibility-flags=\"nodejs_compat\" --ip=0.0.0.0",
     "justdev": "npx wrangler pages dev public/ --compatibility-flags=\"nodejs_compat\" --ip=0.0.0.0",
@@ -23,6 +25,7 @@
     "dotenv": "^8.2.0",
     "inquirer": "^9.2.12",
     "mustache": "^4.0.0",
+    "acorn": "^8.15.0",
     "rimraf": "^3.0.1",
     "rollup": "^4.3.0",
     "rollup-plugin-copy": "^3.5.0",
