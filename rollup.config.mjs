@@ -67,12 +67,14 @@ const buildConfig = () => {
       }),
       createServiceWorkerPlugin(),
       !isDev &&
+        rollbarServerToken &&
         rollbarSourcemaps({
           accessToken: rollbarServerToken,
           baseUrl: '//film.rw251.com/',
           version,
         }), // upload rollbar source maps if production build
       !isDev &&
+        rollbarServerToken &&
         rollbarDeploy({
           accessToken: rollbarServerToken,
           revision: SOURCE_VERSION,
